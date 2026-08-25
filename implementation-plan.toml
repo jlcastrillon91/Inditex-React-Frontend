@@ -1,0 +1,642 @@
+[project]
+name = "inditex-react-frontend"
+description = "Client-side React SPA for browsing mobile devices and adding configured products to a cart."
+language = "JavaScript ES6+"
+framework = "React"
+build_tool = "Vite"
+application_type = "SPA"
+ssr = false
+typescript = false
+api_base_url = "https://itx-frontend-test.onrender.com"
+node_version = "24.19.0"
+node_release_channel = "LTS"
+
+[version_policy]
+default = "Use the latest supported LTS release when the project publishes an LTS channel."
+non_lts_packages = "Use the latest stable, non-beta, non-RC, non-canary release when no LTS channel exists."
+locking = "Commit package-lock.json so installations resolve to the reviewed dependency versions."
+updates = "Accept dependency updates deliberately after lint, tests, build, and browser verification pass."
+prohibited_channels = ["alpha", "beta", "rc", "canary", "experimental", "nightly"]
+notes = [
+  "Node.js publishes an LTS channel, so the project targets Node.js 24.19.0 LTS.",
+  "React and most npm libraries do not publish LTS releases; they use their latest stable release instead.",
+  "React and React DOM must always use matching versions."
+]
+
+[principles]
+architecture = "Simple feature-based architecture"
+rules = [
+  "Keep state as close as possible to where it is used.",
+  "Use React Context only for genuinely shared cart state.",
+  "Keep network, storage, and normalization logic outside presentation components.",
+  "Derive values during rendering instead of duplicating derived state.",
+  "Use semantic HTML and accessible names for all interactions.",
+  "Prefer composition and small focused components.",
+  "Test user-visible behavior and infrastructure edge cases.",
+  "Keep the application runnable at the end of every milestone."
+]
+
+[ui]
+component_system = "Project-owned React components built on semantic HTML"
+styling = "Tailwind CSS 4"
+icons = "lucide-react"
+notifications = "Defer notification-library selection and installation until the cart milestone."
+installation_strategy = "Create only the small reusable primitives required by the application."
+design_direction = "A polished, restrained retail interface customized through project-owned design tokens."
+allowed_components = [
+  "Button",
+  "Input",
+  "Select",
+  "Skeleton",
+  "Badge",
+  "Breadcrumbs"
+]
+rules = [
+  "Build shared UI primitives on native semantic HTML under src/shared/ui.",
+  "Do not use shadcn/ui, Radix UI, CVA, CSS-in-JS, or a full component suite.",
+  "Keep product and cart business components inside their owning features.",
+  "Build ProductCard, ProductGrid, ProductDescription, ProductImage, and page layouts as application components.",
+  "Use Tailwind CSS utilities for layout and visual styling without a CSS-in-JS runtime.",
+  "Keep shared colors, typography, spacing, radii, and shadows in centralized theme tokens.",
+  "Do not construct Tailwind class names dynamically; map variants to complete static class strings.",
+  "Import Lucide icons individually so unused icons are tree-shaken.",
+  "Prefer native button, input, and select elements for minimal JavaScript and built-in accessibility.",
+  "Measure the production build and remove unused UI components or dependencies before delivery."
+]
+
+[scripts]
+start = "vite"
+build = "vite build"
+test = "vitest run"
+lint = "eslint ."
+test_watch = "vitest"
+preview = "vite preview"
+
+[dependencies]
+runtime = [
+  "react@19.2.8",
+  "react-dom@19.2.8",
+  "react-router-dom",
+  "lucide-react"
+]
+development = [
+  "vite",
+  "@vitejs/plugin-react",
+  "tailwindcss",
+  "@tailwindcss/vite",
+  "eslint",
+  "vitest",
+  "jsdom",
+  "@testing-library/react",
+  "@testing-library/jest-dom",
+  "@testing-library/user-event",
+  "msw"
+]
+
+[environment]
+variable = "VITE_API_BASE_URL"
+development_default = "https://itx-frontend-test.onrender.com"
+example_file = ".env.example"
+
+# -----------------------------------------------------------------------------
+# PART 1: INITIAL APPLICATION SKELETON AND BOILERPLATE
+# -----------------------------------------------------------------------------
+
+[skeleton]
+goal = "Create a minimal, runnable React foundation before implementing business features."
+
+[skeleton.commands]
+package_manager = "npm"
+create = "npm create vite@latest . -- --template react"
+install = "npm install"
+run = "npm run start"
+
+[skeleton.configuration]
+import_alias = "@/ -> src/"
+css_strategy = "Tailwind CSS 4 with centralized theme tokens and small native project-owned primitives"
+test_environment = "jsdom"
+api_mocking = "MSW"
+
+[skeleton.routes]
+product_list = "/"
+product_details = "/product/:productId"
+not_found = "*"
+
+[skeleton.structure]
+files = [
+  "src/main.jsx",
+  "src/app/App.jsx",
+  "src/app/router.jsx",
+  "src/app/layouts/AppLayout.jsx",
+  "src/app/layouts/Header.jsx",
+  "src/app/pages/NotFoundPage.jsx",
+  "src/features/products/api/productsApi.js",
+  "src/features/products/components/ProductCard.jsx",
+  "src/features/products/components/ProductGrid.jsx",
+  "src/features/products/components/ProductImage.jsx",
+  "src/features/products/components/ProductDescription.jsx",
+  "src/features/products/components/ProductActions.jsx",
+  "src/features/products/components/ProductSearch.jsx",
+  "src/features/products/hooks/useProducts.js",
+  "src/features/products/hooks/useProduct.js",
+  "src/features/products/pages/ProductListPage.jsx",
+  "src/features/products/pages/ProductDetailsPage.jsx",
+  "src/features/products/utils/normalizeProduct.js",
+  "src/features/products/products.css",
+  "src/features/cart/api/cartApi.js",
+  "src/features/cart/CartContext.jsx",
+  "src/features/cart/useCart.js",
+  "src/shared/api/apiClient.js",
+  "src/shared/config/environment.js",
+  "src/shared/storage/expiringCache.js",
+  "src/shared/ui/Button.jsx",
+  "src/shared/ui/Input.jsx",
+  "src/shared/ui/Select.jsx",
+  "src/shared/ui/Skeleton.jsx",
+  "src/shared/ui/Badge.jsx",
+  "src/shared/ui/Breadcrumbs.jsx",
+  "src/shared/ui/Loader.jsx",
+  "src/shared/ui/ErrorMessage.jsx",
+  "src/shared/ui/EmptyState.jsx",
+  "src/index.css",
+  "src/test/handlers.js",
+  "src/test/server.js",
+  "src/test/setup.js",
+  ".env.example",
+  "README.md"
+]
+
+[skeleton.responsibilities]
+app = "Application composition, route declarations, and global providers."
+product_feature = "Product retrieval, normalization, list/detail UI, search, and configuration actions."
+cart_feature = "Cart request, shared cart count, and persistence."
+shared = "Feature-agnostic UI, API, configuration, storage, and utility modules."
+ui_primitives = "Small project-owned native primitives with no product or cart business logic."
+infrastructure = "Framework-independent HTTP and expiring-storage modules under shared."
+styles = "Tailwind theme tokens, global base rules, layout constraints, and shared accessibility styles."
+test = "Global test setup and API request handlers."
+
+[skeleton.import_boundaries]
+rules = [
+  "app may import features and shared modules.",
+  "features may import shared modules but must not import app internals.",
+  "a feature must not import another feature's private modules; cross-feature access uses an explicit public entry point.",
+  "shared must not import from app or features.",
+  "shared/ui must remain feature-agnostic and must not call APIs, contexts, or localStorage.",
+  "presentation components must not call fetch or localStorage directly.",
+  "feature pages coordinate their own hooks and components but do not implement storage logic.",
+  "create a new top-level feature folder when adding an independent business capability."
+]
+
+[skeleton.initial_ui]
+header = ["Home or logo link", "Breadcrumbs", "Persisted cart count"]
+product_list_placeholder = ["Page heading", "Search placeholder", "Grid placeholder"]
+product_details_placeholder = ["Back link", "Image column", "Description and actions column"]
+not_found = ["Clear message", "Link to product list"]
+
+[skeleton.initial_acceptance]
+criteria = [
+  "The project declares Node.js 24.19.0 LTS as its development and CI runtime.",
+  "Dependencies use an LTS release when available and otherwise a stable release channel.",
+  "No alpha, beta, RC, canary, experimental, or nightly packages are used.",
+  "The reviewed dependency graph is locked with package-lock.json.",
+  "Development server starts with npm run start.",
+  "All three routes render without a full-page reload.",
+  "The header is shared across the list and details routes.",
+  "The application uses JavaScript rather than TypeScript.",
+  "Required start, build, test, and lint scripts exist.",
+  "The README explains installation and available scripts.",
+  "npm run lint, npm run test, and npm run build succeed."
+]
+
+# -----------------------------------------------------------------------------
+# COMPLETE FUNCTIONAL SPECIFICATION
+# -----------------------------------------------------------------------------
+
+[requirements.application]
+views = 2
+requirements = [
+  "Implement a Product List Page and a Product Details Page.",
+  "Use client-side routing as an SPA.",
+  "Do not implement an MPA or SSR solution.",
+  "Follow the structural layout from the supplied wireframes.",
+  "Provide responsive behavior and polished visual detail."
+]
+
+[requirements.header]
+requirements = [
+  "The title or application icon links to the main product list.",
+  "Breadcrumbs show the current location and navigable ancestors.",
+  "The right side displays the number of products in the cart.",
+  "The cart count is visible on every application route."
+]
+
+[requirements.product_list]
+endpoint = "GET /api/product"
+requirements = [
+  "Display every product returned by the API.",
+  "Each product displays image, brand, model, and price.",
+  "Selecting a product navigates to its detail route.",
+  "Render no more than four products per row.",
+  "Adapt the number of columns to the available viewport width.",
+  "Use semantic links for product navigation."
+]
+
+[requirements.search]
+requirements = [
+  "Display a text input on the product list.",
+  "Filter products by brand and model.",
+  "Update results in real time whenever the input changes.",
+  "Match case-insensitively.",
+  "Show a clear no-results state.",
+  "Store the search value in the URL so it survives detail navigation and browser history."
+]
+
+[requirements.product_details]
+endpoint = "GET /api/product/:id"
+layout = "Two columns on wide screens and a single stacked column on narrow screens."
+left_column = ["Product image"]
+right_column = ["Product description", "Product actions"]
+required_attributes = [
+  "brand",
+  "model",
+  "price",
+  "cpu",
+  "ram",
+  "operating system",
+  "display resolution",
+  "battery",
+  "cameras",
+  "dimensions",
+  "weight"
+]
+requirements = [
+  "Show a link back to the product list.",
+  "Normalize inconsistent API field names before rendering.",
+  "Render a human-readable fallback for missing values.",
+  "Provide a broken-image fallback."
+]
+
+[requirements.product_actions]
+endpoint = "POST /api/cart"
+selectors = ["storage", "color"]
+request_fields = ["id", "colorCode", "storageCode"]
+response_field = "count"
+requirements = [
+  "Always display both selectors, even if a selector has only one option.",
+  "Select a single available option by default.",
+  "Select the first option by default when multiple options exist.",
+  "Send the selected option codes rather than their labels.",
+  "Disable duplicate submissions while the POST request is pending.",
+  "Treat the count returned by the API as authoritative.",
+  "Update and persist the shared cart count after a successful request.",
+  "Show accessible success or error feedback."
+]
+
+[requirements.cart_persistence]
+storage = "localStorage"
+key = "itx:cart-count"
+requirements = [
+  "Initialize shared cart state from persisted client storage.",
+  "Safely recover from missing or malformed persisted values.",
+  "Display the same count on all routes and after a page refresh."
+]
+
+[requirements.cache]
+storage = "localStorage"
+ttl_minutes = 60
+schema_version = 1
+keys = ["itx:cache:products", "itx:cache:product:<id>"]
+stored_fields = ["version", "data", "expiresAt"]
+requirements = [
+  "Cache every successful product GET response on the client.",
+  "Return cached data without a network request while it remains valid.",
+  "Revalidate from the API after one hour.",
+  "Discard expired, malformed, or incompatible cache entries.",
+  "Do not cache failed responses or cart mutations.",
+  "Keep cache logic independent from React."
+]
+
+[requirements.states]
+required = [
+  "initial loading",
+  "successful data",
+  "empty catalogue",
+  "no search results",
+  "retryable API error",
+  "product not found",
+  "broken image",
+  "cart request pending",
+  "cart request success",
+  "cart request failure"
+]
+
+[requirements.accessibility]
+requirements = [
+  "Use semantic headings, links, buttons, labels, and select elements.",
+  "Support complete keyboard navigation.",
+  "Provide visible focus indicators.",
+  "Give images meaningful alternative text or mark decorative images appropriately.",
+  "Associate labels with the search and option selectors.",
+  "Announce asynchronous cart feedback appropriately.",
+  "Maintain adequate color contrast and usable touch target sizes."
+]
+
+[requirements.responsive_design]
+product_grid = [
+  "Up to four columns on large screens.",
+  "Three or two columns at medium widths as space allows.",
+  "One column on narrow mobile screens."
+]
+product_details = [
+  "Two columns on desktop.",
+  "One stacked column on mobile."
+]
+visual_direction = [
+  "Neutral retail palette.",
+  "Strong product-image hierarchy.",
+  "Generous whitespace.",
+  "Thin borders and restrained shadows.",
+  "Clear price and action hierarchy.",
+  "Consistent spacing and typography tokens."
+]
+implementation = [
+  "Use small native project-owned primitives for buttons, inputs, selects, skeletons, badges, breadcrumbs, and notifications.",
+  "Use Tailwind CSS 4 for responsive layouts and application-specific visual styling.",
+  "Use individually imported Lucide icons.",
+  "Create only the explicitly approved UI primitives."
+]
+
+# -----------------------------------------------------------------------------
+# PART 2: ORDERED IMPLEMENTATION PLAN
+# -----------------------------------------------------------------------------
+
+[[implementation.milestones]]
+order = 1
+name = "Project foundation"
+depends_on = []
+tasks = [
+  "Create the Vite React JavaScript application.",
+  "Install routing, testing, mocking, and linting dependencies.",
+  "Install Tailwind CSS 4 through its Vite integration.",
+  "Create native Button, Input, Select, Skeleton, Badge, and Breadcrumbs primitives.",
+  "Install Lucide React and import icons individually.",
+  "Configure the @/ import alias.",
+  "Create required npm scripts.",
+  "Add .env.example and the initial README.",
+  "Create the agreed directory skeleton."
+]
+acceptance = [
+  "The development server starts.",
+  "Tailwind theme tokens and project-owned native primitives compile successfully.",
+  "No shadcn, Radix UI, CVA, or CSS-in-JS dependencies are installed.",
+  "A smoke test passes.",
+  "Lint and production build pass."
+]
+
+[[implementation.milestones]]
+order = 2
+name = "Application shell and routing"
+depends_on = [1]
+tasks = [
+  "Create the router and global providers composition.",
+  "Create list, detail, and not-found routes.",
+  "Implement the shared responsive shell.",
+  "Implement Header and Breadcrumbs placeholders.",
+  "Add CSS reset, tokens, content width, and focus styles."
+]
+acceptance = [
+  "Navigation is client-side.",
+  "The shared header appears on all routes.",
+  "Unknown routes show a useful not-found page."
+]
+
+[[implementation.milestones]]
+order = 3
+name = "HTTP client and product normalization"
+depends_on = [2]
+tasks = [
+  "Implement the reusable fetch-based API client.",
+  "Read the base URL from VITE_API_BASE_URL.",
+  "Handle non-success status codes, invalid responses, and abort signals.",
+  "Normalize list and detail product payloads into a stable UI model."
+]
+acceptance = [
+  "Components do not call fetch directly.",
+  "API errors use one consistent application error shape.",
+  "Normalization safely handles missing and inconsistent fields."
+]
+
+[[implementation.milestones]]
+order = 4
+name = "One-hour client cache"
+depends_on = [3]
+tasks = [
+  "Implement framework-independent expiring localStorage entries.",
+  "Store version, data, and expiresAt.",
+  "Remove expired or malformed entries.",
+  "Add unit tests for hit, miss, expiry, corruption, and storage failures."
+]
+acceptance = [
+  "Valid cache entries avoid a network request.",
+  "Entries expire after exactly one hour.",
+  "Storage failures do not make the application unusable."
+]
+
+[[implementation.milestones]]
+order = 5
+name = "Product list data flow"
+depends_on = [4]
+tasks = [
+  "Implement productsApi.getProducts.",
+  "Integrate the list endpoint with the one-hour cache.",
+  "Implement useProducts with loading, success, empty, error, and retry states.",
+  "Mock the list endpoint with MSW for tests."
+]
+acceptance = [
+  "The list endpoint is requested when no valid cache exists.",
+  "Repeated access uses valid cached data.",
+  "Failures render a retryable state."
+]
+
+[[implementation.milestones]]
+order = 6
+name = "Product List Page"
+depends_on = [5]
+tasks = [
+  "Implement ProductCard and ProductGrid.",
+  "Render image, brand, model, and price.",
+  "Make each card a semantic link to /product/:productId.",
+  "Implement the responsive grid with a maximum of four columns.",
+  "Add loading, empty-list, error, and broken-image presentations."
+]
+acceptance = [
+  "Every API product is rendered.",
+  "Cards are keyboard accessible.",
+  "The grid adapts from four columns to one."
+]
+
+[[implementation.milestones]]
+order = 7
+name = "Real-time product search"
+depends_on = [6]
+tasks = [
+  "Implement the accessible SearchInput.",
+  "Initialize the search from the URL query string.",
+  "Filter brand and model in real time and case-insensitively.",
+  "Update the URL without full-page navigation.",
+  "Render the no-results state."
+]
+acceptance = [
+  "Every input change updates visible results.",
+  "Brand and model both match.",
+  "Browser history and returning from details preserve the query."
+]
+
+[[implementation.milestones]]
+order = 8
+name = "Product detail data flow"
+depends_on = [4, 6]
+tasks = [
+  "Implement productsApi.getProduct(productId).",
+  "Cache each detail response under a product-specific key.",
+  "Implement useProduct with abort-safe loading and retry behavior.",
+  "Handle invalid and missing products."
+]
+acceptance = [
+  "Each ID receives an independent cache entry.",
+  "Expired detail data is revalidated.",
+  "Missing products show a controlled state."
+]
+
+[[implementation.milestones]]
+order = 9
+name = "Product Details Page"
+depends_on = [8]
+tasks = [
+  "Build the responsive image and information columns.",
+  "Implement ProductImage and ProductDescription.",
+  "Render every product attribute required by the specification.",
+  "Add the product breadcrumb and back-to-list link.",
+  "Render fallbacks for missing values and images."
+]
+acceptance = [
+  "The desktop page uses two columns.",
+  "The mobile page uses one stacked column.",
+  "All required attributes have labels and values or fallbacks."
+]
+
+[[implementation.milestones]]
+order = 10
+name = "Shared cart state and persistence"
+depends_on = [2]
+tasks = [
+  "Implement CartContext and useCart.",
+  "Initialize count from itx:cart-count.",
+  "Persist valid count updates.",
+  "Connect the count to the shared header.",
+  "Safely recover from malformed persisted values."
+]
+acceptance = [
+  "The same cart count appears on every route.",
+  "The count survives a refresh.",
+  "Invalid stored values fall back safely."
+]
+
+[[implementation.milestones]]
+order = 11
+name = "Product selectors and add-to-cart"
+depends_on = [9, 10]
+tasks = [
+  "Implement storage and color selectors.",
+  "Keep both selectors visible for single-option products.",
+  "Select the first available option by default.",
+  "Implement cartApi.addProduct.",
+  "Send id, colorCode, and storageCode.",
+  "Prevent duplicate submissions while pending.",
+  "Replace shared count with the API response count.",
+  "Show accessible success and failure feedback."
+]
+acceptance = [
+  "The POST payload contains the three required values.",
+  "Option codes, not labels, are submitted.",
+  "The header updates immediately after success.",
+  "Repeated clicks cannot create concurrent duplicate requests."
+]
+
+[[implementation.milestones]]
+order = 12
+name = "Accessibility, resilience, and visual polish"
+depends_on = [7, 11]
+tasks = [
+  "Verify semantic structure and heading order.",
+  "Verify labels, keyboard navigation, focus visibility, and status announcements.",
+  "Polish loading, retry, empty, not-found, and image fallback states.",
+  "Verify mobile, tablet, laptop, and wide desktop layouts.",
+  "Ensure consistent spacing, typography, color contrast, and touch targets."
+]
+acceptance = [
+  "All application actions work with the keyboard.",
+  "Async feedback is accessible.",
+  "No content overflows at supported viewport widths.",
+  "The interface follows the PDF wireframe structure."
+]
+
+[[implementation.milestones]]
+order = 13
+name = "Automated and browser verification"
+depends_on = [12]
+tasks = [
+  "Complete cache and normalization unit tests.",
+  "Complete list, search, details, and cart integration tests.",
+  "Run lint, test, and production build.",
+  "Exercise the complete user journey in a browser.",
+  "Verify refresh persistence and one-hour cache behavior."
+]
+acceptance = [
+  "npm run lint succeeds.",
+  "npm run test succeeds.",
+  "npm run build succeeds.",
+  "Catalogue, search, details, configuration, cart, return navigation, and refresh all work."
+]
+
+[[implementation.milestones]]
+order = 14
+name = "Documentation and delivery"
+depends_on = [13]
+tasks = [
+  "Complete README installation and execution instructions.",
+  "Document architecture, scripts, routes, environment configuration, and test strategy.",
+  "Explain cache expiration and cart persistence.",
+  "Document assumptions, API limitations, and important tradeoffs.",
+  "Confirm that no secrets, generated output, or temporary files are committed."
+]
+acceptance = [
+  "A new developer can install, run, test, lint, and build the project from the README.",
+  "The implementation decisions and known limitations are explicit."
+]
+
+[implementation.final_user_journey]
+steps = [
+  "Open the catalogue.",
+  "Wait for products or cached data to render.",
+  "Search by brand and model.",
+  "Open a product.",
+  "Review all required product details.",
+  "Choose storage and color options.",
+  "Add the configured product to the cart.",
+  "Confirm the header displays the API-returned cart count.",
+  "Return to the catalogue and confirm the search is preserved.",
+  "Refresh and confirm the cart count and valid cached product data persist."
+]
+
+[implementation.definition_of_done]
+criteria = [
+  "All PDF functional requirements are implemented.",
+  "The application is a client-rendered React SPA written in JavaScript.",
+  "Product GET responses are cached on the client for one hour.",
+  "Cart count is persisted and displayed on all routes.",
+  "The UI is responsive, accessible, and resilient to API and data failures.",
+  "Required scripts work and all automated checks pass.",
+  "The README is sufficient for independent setup and evaluation."
+]
