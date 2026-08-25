@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "localstorage-slim": "^2.7.1",
     "lucide-react": "latest",
     "react": "19.2.8",
     "react-dom": "19.2.8",
