@@ -23,6 +23,16 @@ server_data = "Feature hooks expose loading, success, error, and retry states."
 local_state = "Keep state in the closest component or hook that needs it."
 global_state = "Add Context or Redux Toolkit only when state is genuinely shared across unrelated routes."
 
+[react_pattern]
+name = "Modern Container/Presentational pattern"
+flow = "feature hook -> route page -> presentational components"
+rules = [
+  "Route pages act as thin containers for route parameters, hooks, request states, and composition.",
+  "Custom hooks own reusable data access and stateful behavior.",
+  "Feature and shared components receive structured props, render UI, and emit events without fetching data or reading routes.",
+  "Extract a presentational component when a route page starts owning detailed UI markup."
+]
+
 [testing]
 location = "Keep tests beside the source file; keep reusable feature fixtures in features/<name>/test."
 focus = "Test visible behavior, accessibility, data boundaries, and failure states."
