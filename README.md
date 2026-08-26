@@ -34,7 +34,8 @@ npm run preview     # Preview the production build
 
 The project follows a scalable feature-first architecture:
 
-- `src/app`: application composition, routing, providers, layouts, and app pages.
+- `src/app`: application composition, routing, global providers, and layouts.
+- `src/pages`: thin route-level containers that compose feature hooks and UI.
 - `src/features`: independently owned business capabilities such as products and cart.
 - `src/shared/ui`: small native UI primitives reusable across features.
 - `src/shared/api`: framework-independent HTTP infrastructure.
@@ -44,9 +45,9 @@ The project follows a scalable feature-first architecture:
 
 Dependencies flow inward: `app` may use `features` and `shared`; features may
 use `shared`; shared modules never import application or feature code. New
-business capabilities receive their own folder under `src/features`. Each
-feature exposes an `index.js` public API; external modules must not import its
-private `api`, `components`, `hooks`, `model`, `pages`, or `utils` modules.
+business capabilities receive their own folder under `src/features`. Feature
+barrels expose the modules used across architectural boundaries, while modules
+inside a feature may import their siblings directly.
 
 The UI uses Tailwind CSS 4, semantic HTML, small project-owned components, and
 individually imported Lucide icons. It intentionally does not use shadcn, Radix,
@@ -63,3 +64,10 @@ https://itx-frontend-test.onrender.com
 ```
 
 Do not commit local `.env` files.
+
+## Development notes
+
+React Strict Mode intentionally runs effect setup and cleanup twice in
+development. A product-detail GET may therefore appear once as cancelled and
+once as successful in browser developer tools. The cleanup validates request
+cancellation; production performs a single request.
