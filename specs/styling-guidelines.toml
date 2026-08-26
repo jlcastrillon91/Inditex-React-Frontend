@@ -13,7 +13,54 @@ values = [
   "Prefer semantic HTML and native controls over JavaScript-driven replacements.",
   "Use restrained motion that communicates interaction without delaying the user.",
   "Keep every visual decision compatible with a small production bundle.",
-  "Use shared tokens and primitives to maintain consistency across future features."
+  "Use shared tokens and primitives to maintain consistency across future features.",
+  "Treat Tailwind as a replaceable presentation implementation detail rather than part of the business architecture."
+]
+
+[portability]
+objective = "Allow the styling implementation to move from Tailwind to CSS Modules, Vanilla Extract, Panda CSS, or another system without rewriting business logic or component consumers."
+tailwind_boundary = [
+  "src/index.css",
+  "src/shared/ui",
+  "src/shared/layout",
+  "feature presentation components"
+]
+tailwind_prohibited = [
+  "src/shared/api",
+  "src/shared/config",
+  "src/shared/storage",
+  "src/features/*/api",
+  "src/features/*/hooks",
+  "src/features/*/model"
+]
+requirements = [
+  "Keep API services, cache modules, configuration, hooks, and data models independent of all styling libraries.",
+  "Expose stable semantic component props instead of requiring consumers to provide Tailwind classes.",
+  "Keep route pages focused on composition by using shared layout and feature presentation components.",
+  "Do not export Tailwind class strings from business modules.",
+  "Do not create abstractions for every CSS property; encapsulate only stable, repeated patterns.",
+  "Permit className only as an escape hatch for genuinely unique local composition."
+]
+
+[component_api]
+preferred_example = "<Button variant='primary' size='large' fullWidth>Add to cart</Button>"
+discouraged_example = "<Button className='h-12 w-full bg-neutral-950 px-6 text-white'>Add to cart</Button>"
+requirements = [
+  "Use semantic props such as variant, size, fullWidth, tone, state, and shape for supported visual variations.",
+  "Keep the same public props if a component implementation moves to another styling system.",
+  "Keep accessibility behavior inside the shared component contract.",
+  "Do not expose styling-library-specific types or configuration through component props.",
+  "Keep finite variant mappings inside the component that owns them.",
+  "Use complete static Tailwind class strings so the build system can detect every class."
+]
+
+[page_composition]
+preferred = "Pages compose Page, PageHeader, feature controls, feedback states, and feature content components."
+requirements = [
+  "Avoid repeating container, page-padding, header-alignment, and section-spacing class lists in route pages.",
+  "Create shared layout components only after a layout pattern is stable or used by multiple pages.",
+  "Keep product-specific layouts inside the products feature rather than moving them into shared.",
+  "A route page coordinates hooks and state branches; detailed presentation belongs to child components."
 ]
 
 [visual_identity]
@@ -42,6 +89,28 @@ primary_hover = "#353531"
 primary_foreground = "#FFFFFF"
 error = "#B42318"
 focus = "#3B82F6"
+
+[tokens]
+format = "Standard CSS custom properties"
+requirements = [
+  "Define colours, spacing, radii, typography, and motion values as library-independent CSS variables.",
+  "Use stable semantic names such as --color-surface and --space-4 rather than utility-library names.",
+  "Allow Tailwind to consume the tokens without making Tailwind their source of truth.",
+  "Keep token changes backward-compatible unless the styling specification version is incremented."
+]
+
+[tokens.names]
+background = "--color-background"
+surface = "--color-surface"
+surface_muted = "--color-surface-muted"
+text = "--color-text"
+text_muted = "--color-text-muted"
+border = "--color-border"
+primary = "--color-primary"
+focus = "--color-focus"
+spacing_prefix = "--space-"
+radius_prefix = "--radius-"
+motion_prefix = "--motion-"
 
 [colors.rules]
 requirements = [
@@ -97,7 +166,9 @@ requirements = [
   "Avoid horizontal page scrolling at 320px viewport width.",
   "Keep primary content aligned to the same container across the header, PLP, and PDP.",
   "Use CSS Grid for product listings and the desktop product-detail split.",
-  "Use Flexbox for local alignment such as toolbars and metadata rows."
+  "Use Flexbox for local alignment such as toolbars and metadata rows.",
+  "Encapsulate repeated page containers and page-header geometry under src/shared/layout.",
+  "Keep one-off layout utilities local instead of creating premature shared abstractions."
 ]
 
 [header]
@@ -227,7 +298,24 @@ requirements = [
   "Do not add a component or animation library for one small interaction.",
   "Lazy-load future routes when feature growth creates meaningful chunks.",
   "Measure production CSS and JavaScript gzip sizes after each UI milestone.",
-  "Prevent cumulative layout shift by reserving space for images and loading states."
+  "Prevent cumulative layout shift by reserving space for images and loading states.",
+  "Keep the styling-library dependency out of business and data modules.",
+  "A future styling migration must not require changes to API, storage, hooks, models, routes, or behavioral test assertions."
+]
+
+[testing]
+strategy = "Assert behavior, semantics, and accessibility rather than styling-library implementation details."
+preferred_assertions = [
+  "element has the expected accessible name",
+  "button is enabled or disabled as required",
+  "link points to the expected route",
+  "status feedback uses the appropriate accessible role",
+  "keyboard interaction produces the expected behavior"
+]
+prohibited_assertions = [
+  "element has a specific Tailwind utility class",
+  "a component exposes an internal variant class string",
+  "a snapshot is used as the only proof of accessible behavior"
 ]
 
 [prohibited_patterns]
@@ -257,7 +345,9 @@ checks = [
   "Hover-only devices and touch devices both receive complete functionality.",
   "Loading states preserve final layout dimensions.",
   "Reduced-motion preference disables nonessential motion.",
-  "Production bundle size remains proportionate to the implemented functionality."
+  "Production bundle size remains proportionate to the implemented functionality.",
+  "Route pages use semantic component APIs instead of duplicating stable Tailwind class collections.",
+  "Behavioral tests do not assert Tailwind utility names."
 ]
 
 [references]
