@@ -1,81 +1,15 @@
 [guide]
 name = "Editorial Minimal Retail"
-version = 1
-status = "active"
-scope = "Product list, search, product details, shared application shell, and feedback states."
-objective = "Create a modern product-focused retail experience that remains accessible, lightweight, responsive, and easy to maintain."
+goal = "A product-focused, accessible retail UI with a small bundle and simple code."
+implementation = "Tailwind CSS 4 over semantic HTML and project-owned React components."
 
 [principles]
-values = [
-  "Product imagery and product information take priority over interface decoration.",
-  "Use typography and whitespace to create hierarchy before adding containers or effects.",
-  "Design mobile-first and progressively enhance layouts for wider screens.",
-  "Prefer semantic HTML and native controls over JavaScript-driven replacements.",
-  "Use restrained motion that communicates interaction without delaying the user.",
-  "Keep every visual decision compatible with a small production bundle.",
-  "Use shared tokens and primitives to maintain consistency across future features.",
-  "Treat Tailwind as a replaceable presentation implementation detail rather than part of the business architecture."
+items = [
+  "Prioritize product imagery, typography, and whitespace over decoration.",
+  "Design mobile-first and progressively enhance wider layouts.",
+  "Use native controls and restrained motion.",
+  "Keep Tailwind out of API, cache, configuration, hooks, and models."
 ]
-
-[portability]
-objective = "Allow the styling implementation to move from Tailwind to CSS Modules, Vanilla Extract, Panda CSS, or another system without rewriting business logic or component consumers."
-tailwind_boundary = [
-  "src/index.css",
-  "src/shared/ui",
-  "src/shared/layout",
-  "feature presentation components"
-]
-tailwind_prohibited = [
-  "src/shared/api",
-  "src/shared/config",
-  "src/shared/storage",
-  "src/features/*/api",
-  "src/features/*/hooks",
-  "src/features/*/model"
-]
-requirements = [
-  "Keep API services, cache modules, configuration, hooks, and data models independent of all styling libraries.",
-  "Expose stable semantic component props instead of requiring consumers to provide Tailwind classes.",
-  "Keep route pages focused on composition by using shared layout and feature presentation components.",
-  "Do not export Tailwind class strings from business modules.",
-  "Do not create abstractions for every CSS property; encapsulate only stable, repeated patterns.",
-  "Permit className only as an escape hatch for genuinely unique local composition."
-]
-
-[component_api]
-preferred_example = "<Button variant='primary' size='large' fullWidth>Add to cart</Button>"
-discouraged_example = "<Button className='h-12 w-full bg-neutral-950 px-6 text-white'>Add to cart</Button>"
-requirements = [
-  "Use semantic props such as variant, size, fullWidth, tone, state, and shape for supported visual variations.",
-  "Keep the same public props if a component implementation moves to another styling system.",
-  "Keep accessibility behavior inside the shared component contract.",
-  "Do not expose styling-library-specific types or configuration through component props.",
-  "Keep finite variant mappings inside the component that owns them.",
-  "Use complete static Tailwind class strings so the build system can detect every class."
-]
-
-[page_composition]
-preferred = "Pages compose Page, PageHeader, feature controls, feedback states, and feature content components."
-requirements = [
-  "Avoid repeating container, page-padding, header-alignment, and section-spacing class lists in route pages.",
-  "Create shared layout components only after a layout pattern is stable or used by multiple pages.",
-  "Keep product-specific layouts inside the products feature rather than moving them into shared.",
-  "A route page coordinates hooks and state branches; detailed presentation belongs to child components."
-]
-
-[visual_identity]
-keywords = [
-  "editorial",
-  "product-focused",
-  "warm neutral",
-  "spacious",
-  "typographically clear",
-  "subtly interactive",
-  "mobile-first",
-  "accessible",
-  "fast"
-]
-personality = "Quiet confidence with subtle warmth; closer to a curated retail catalogue than a SaaS dashboard."
 
 [colors]
 background = "#FAFAF8"
@@ -85,274 +19,104 @@ text = "#181816"
 text_muted = "#6B6963"
 border = "#E2E0DA"
 primary = "#181816"
-primary_hover = "#353531"
 primary_foreground = "#FFFFFF"
 error = "#B42318"
 focus = "#3B82F6"
 
 [tokens]
-format = "Standard CSS custom properties"
-requirements = [
-  "Define colours, spacing, radii, typography, and motion values as library-independent CSS variables.",
-  "Use stable semantic names such as --color-surface and --space-4 rather than utility-library names.",
-  "Allow Tailwind to consume the tokens without making Tailwind their source of truth.",
-  "Keep token changes backward-compatible unless the styling specification version is incremented."
-]
-
-[tokens.names]
-background = "--color-background"
-surface = "--color-surface"
-surface_muted = "--color-surface-muted"
-text = "--color-text"
-text_muted = "--color-text-muted"
-border = "--color-border"
-primary = "--color-primary"
-focus = "--color-focus"
-spacing_prefix = "--space-"
-radius_prefix = "--radius-"
-motion_prefix = "--motion-"
-
-[colors.rules]
-requirements = [
-  "Use product photography as the principal source of colour.",
-  "Use the primary colour for the main action and high-emphasis text only.",
-  "Do not introduce additional brand colours without a concrete product requirement.",
-  "Never communicate status through colour alone.",
-  "Verify text, borders, icons, and focus indicators against WCAG 2.2 contrast requirements."
+format = "Semantic CSS custom properties consumed by Tailwind."
+rules = [
+  "Use library-independent names such as --color-surface and --space-4.",
+  "Centralize color, spacing, radius, typography, and motion values.",
+  "Do not export Tailwind class strings from business modules."
 ]
 
 [typography]
-font_family = "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-font_strategy = "Use system fonts to avoid external font requests and layout shifts."
-
-[typography.scale]
-page_title = "clamp(2.25rem, 4vw, 3rem); font-weight: 600; line-height: 1.05"
-section_title = "1.5rem; font-weight: 600; line-height: 1.2"
-product_model = "1rem; font-weight: 500; line-height: 1.4"
-product_price = "0.9375rem to 1rem; font-weight: 600"
-product_brand = "0.75rem; font-weight: 500; uppercase; letter-spacing: 0.12em"
-body = "0.9375rem to 1rem; line-height: 1.6"
-metadata = "0.8125rem to 0.875rem; line-height: 1.5"
-
-[typography.rules]
-requirements = [
-  "Use large display typography selectively; the catalogue does not need a marketing hero.",
-  "Limit body copy width to approximately 65 characters when practical.",
-  "Do not use font weight alone as the only distinction between interactive and static text.",
-  "Use tabular numbers for prices or counts when alignment benefits comparison."
-]
-
-[spacing]
-base_unit_px = 4
-scale_px = [4, 8, 12, 16, 24, 32, 48, 64]
-content_max_width_px = 1280
-mobile_page_padding_px = 16
-tablet_page_padding_px = 24
-desktop_page_padding_px = 32
-grid_gap_px = "16 to 24"
-section_gap_px = "32 to 48"
-
-[shape]
-standard_radius_px = 6
-image_radius_px = 8
-button_radius_px = "4 to 6"
-border_width_px = 1
-shadow_policy = "Use shadows only for floating overlays; product cards remain flat."
+font = "System sans-serif stack"
+page_title = "2.25rem to 3rem, weight 600"
+section_title = "1.5rem, weight 600"
+product_model = "1rem, weight 500"
+product_price = "0.9375rem to 1rem, weight 600, tabular numbers"
+product_brand = "0.75rem, uppercase, tracked"
+body = "0.9375rem to 1rem, line-height 1.6"
 
 [layout]
-content_container = "Centered, fluid width with a maximum width of 1280px."
-mobile_first = true
-requirements = [
-  "Avoid horizontal page scrolling at 320px viewport width.",
-  "Keep primary content aligned to the same container across the header, PLP, and PDP.",
-  "Use CSS Grid for product listings and the desktop product-detail split.",
-  "Use Flexbox for local alignment such as toolbars and metadata rows.",
-  "Encapsulate repeated page containers and page-header geometry under src/shared/layout.",
-  "Keep one-off layout utilities local instead of creating premature shared abstractions."
-]
-
-[header]
-height_px = 72
-position = "sticky"
-requirements = [
-  "Use a thin bottom border rather than a shadow.",
-  "Keep the application title visually compact and link it to the product list.",
-  "Place breadcrumbs in the shared header or immediately beneath it with consistent alignment.",
-  "Display the cart count with a concise accessible label.",
-  "Avoid oversized navigation or decorative header elements."
+max_width_px = 1280
+page_padding_px = [16, 24, 32]
+spacing_scale_px = [4, 8, 12, 16, 24, 32, 48, 64]
+rules = [
+  "Use shared Container and PageHeader components for repeated page geometry.",
+  "Use CSS Grid for catalogue and product-detail layouts.",
+  "Avoid horizontal overflow at 320px."
 ]
 
 [product_list]
-requirements = [
-  "Place the page title and result count on the left and search on the right at desktop widths.",
-  "Stack search below the title and make it full width on mobile.",
-  "Render no more than four products per row.",
-  "Keep loading, empty, error, and filtered-empty states within the catalogue region.",
-  "Do not change the grid geometry when search results update."
+columns = "1 below 640px, 2 from 640px, 3 from 1024px, 4 from 1280px"
+rules = [
+  "Keep loading, empty, error, and no-results states inside the catalogue region.",
+  "Keep grid geometry stable while results change.",
+  "Stack full-width search below the title on mobile."
 ]
-
-[product_list.grid]
-mobile = "1 column below 640px"
-small_tablet = "2 columns from 640px"
-desktop = "3 columns from 1024px"
-wide_desktop = "4 columns from 1280px"
 
 [product_card]
-image_aspect_ratio = "1 / 1"
-image_fit = "contain"
-requirements = [
-  "Make the entire card a semantic link to the product details route.",
-  "Do not use an outer card border or permanent shadow.",
-  "Use a muted surface behind the product image.",
-  "Display brand, model, and price beneath the image in that hierarchy.",
-  "Reserve image dimensions to prevent layout shifts.",
-  "Use a visible focus outline around the complete interactive card.",
-  "Limit hover motion to a subtle image scale of no more than 1.02.",
-  "Do not hide required product information until hover."
-]
-
-[search]
-desktop_width_px = 320
-height_px = 44
-requirements = [
-  "Use an explicitly associated accessible label even when the visual label is hidden.",
-  "Use type='search' and a decorative Lucide search icon.",
-  "Provide a clear control when text exists.",
-  "Show a concise product count or filtered-results summary.",
-  "Do not trigger layout movement while filtering."
+rules = [
+  "Make the complete card a semantic product-details link.",
+  "Use a square muted image area with object-fit contain.",
+  "Show brand, model, and price below the image.",
+  "Keep cards flat with no permanent border or shadow.",
+  "Reserve image dimensions and provide a visible focus outline.",
+  "Limit hover image scale to 1.02."
 ]
 
 [product_details]
-desktop_layout = "Two balanced columns: image on the left, description and actions on the right."
-mobile_layout = "One stacked column: back link, image, description, actions."
-requirements = [
-  "Use a large muted image surface with object-fit contain.",
-  "Render specifications with semantic description-list markup.",
-  "Use thin separators rather than boxing every specification row.",
-  "Keep selectors and the Add button visually grouped.",
-  "Use a strong full-width primary Add button within the action area.",
-  "A sticky action column is allowed on desktop when it does not obscure content.",
-  "Keep the back-to-products link visible and keyboard accessible."
+layout = "Two columns on desktop; one stacked column on mobile."
+rules = [
+  "Use a large contained product image.",
+  "Render specifications with a semantic description list and thin separators.",
+  "Group selectors with a strong full-width add-to-cart button."
 ]
 
-[controls]
-minimum_height_px = 44
-requirements = [
-  "Use native button, input, and select elements.",
-  "Provide visible hover, active, disabled, invalid, and focus-visible states.",
-  "Use the primary filled style for the single dominant page action.",
-  "Use outline or text styles for secondary actions.",
-  "Never remove native focus without providing a stronger replacement."
-]
-
-[feedback_states]
-loading = "Use skeletons matching the final content dimensions to prevent layout shift."
-empty = "Use a concise heading and explanation without decorative illustration dependencies."
-error = "State what failed in plain language and provide a Retry button when recovery is possible."
-success = "Use immediate inline or live-region feedback; add a toast library only if later interaction design requires it."
-image_failure = "Use a quiet placeholder that preserves the image region and product name."
-
-[motion]
-duration_ms = "150 to 200"
-allowed = [
-  "button colour transitions",
-  "focus and hover transitions",
-  "product image scale up to 1.02",
-  "skeleton pulse"
-]
-prohibited = [
-  "parallax",
-  "autoplay carousels",
-  "large page-transition libraries",
-  "layout-shifting entrance animations",
-  "decorative continuous motion"
-]
-respect_reduced_motion = true
-
-[images]
-requirements = [
-  "Include explicit width and height attributes or an equivalent CSS aspect ratio.",
-  "Use meaningful alt text in the form '<brand> <model>'.",
-  "Use loading='lazy' and decoding='async' for offscreen list images.",
-  "Do not lazy-load the likely Largest Contentful Paint image.",
-  "Use responsive image sources when the origin service provides appropriate variants.",
-  "Avoid client-side image libraries when CSS object-fit is sufficient."
+[components]
+rules = [
+  "Build shared primitives on native HTML under src/shared/ui.",
+  "Expose semantic props such as variant, size, tone, and state.",
+  "Keep product-specific presentation under features/products/components.",
+  "Do not add a component, CSS-in-JS, or animation library for minor interactions."
 ]
 
 [accessibility]
 target = "WCAG 2.2 AA"
-requirements = [
+rules = [
   "Use semantic landmarks, headings, lists, links, buttons, labels, and description lists.",
-  "Provide full keyboard navigation in logical DOM order.",
-  "Ensure focus is never hidden beneath sticky content.",
-  "Use visible focus indicators with sufficient area and contrast.",
-  "Maintain minimum practical touch targets of 44px even when WCAG exceptions would allow less.",
-  "Announce asynchronous errors and cart feedback with appropriate live regions.",
-  "Verify the interface at 200 percent browser zoom."
+  "Provide complete keyboard navigation and visible focus.",
+  "Use at least 44px practical touch targets.",
+  "Never communicate status through color alone.",
+  "Announce asynchronous errors and cart feedback."
 ]
 
+[feedback]
+loading = "Skeletons preserve final dimensions."
+empty = "Concise heading and explanation."
+error = "Plain-language message with Retry when possible."
+image_failure = "Quiet placeholder preserving image geometry and product name."
+
 [performance]
-requirements = [
-  "Use Tailwind CSS utilities and native elements without a CSS-in-JS runtime.",
-  "Import Lucide icons individually.",
-  "Do not add a component or animation library for one small interaction.",
-  "Lazy-load future routes when feature growth creates meaningful chunks.",
-  "Measure production CSS and JavaScript gzip sizes after each UI milestone.",
-  "Prevent cumulative layout shift by reserving space for images and loading states.",
-  "Keep the styling-library dependency out of business and data modules.",
-  "A future styling migration must not require changes to API, storage, hooks, models, routes, or behavioral test assertions."
+rules = [
+  "Use system fonts and individually imported Lucide icons.",
+  "Lazy-load offscreen list images and reserve their dimensions.",
+  "Avoid CSS-in-JS and decorative animation dependencies.",
+  "Measure production CSS and JavaScript gzip sizes after UI milestones."
 ]
 
 [testing]
-strategy = "Assert behavior, semantics, and accessibility rather than styling-library implementation details."
-preferred_assertions = [
-  "element has the expected accessible name",
-  "button is enabled or disabled as required",
-  "link points to the expected route",
-  "status feedback uses the appropriate accessible role",
-  "keyboard interaction produces the expected behavior"
-]
-prohibited_assertions = [
-  "element has a specific Tailwind utility class",
-  "a component exposes an internal variant class string",
-  "a snapshot is used as the only proof of accessible behavior"
-]
+rule = "Assert behavior, semantics, and accessibility; do not assert Tailwind utility names."
 
-[prohibited_patterns]
-items = [
-  "glassmorphism",
-  "large decorative gradients",
-  "deep permanent card shadows",
-  "excessive rounded containers",
-  "autoplay media",
-  "oversized catalogue hero sections",
-  "multiple competing accent colours",
-  "hidden hover-only product information",
-  "tiny controls",
-  "low-contrast grey text",
-  "decorative animation dependencies",
-  "dashboard-style boxed layouts"
-]
-
-[quality_assurance]
+[qa]
 viewports_px = [320, 375, 768, 1024, 1280, 1440]
 checks = [
-  "No horizontal overflow.",
-  "Grid uses the expected number of columns without exceeding four.",
-  "Product images remain contained and visually aligned.",
-  "Text remains legible and unclipped at 200 percent zoom.",
-  "All interactive controls have visible keyboard focus.",
-  "Hover-only devices and touch devices both receive complete functionality.",
-  "Loading states preserve final layout dimensions.",
-  "Reduced-motion preference disables nonessential motion.",
-  "Production bundle size remains proportionate to the implemented functionality.",
-  "Route pages use semantic component APIs instead of duplicating stable Tailwind class collections.",
-  "Behavioral tests do not assert Tailwind utility names."
-]
-
-[references]
-sources = [
-  "Baymard Institute Product Lists and Filtering UX research",
-  "W3C Web Content Accessibility Guidelines 2.2",
-  "web.dev responsive image guidance"
+  "No horizontal overflow or clipped content.",
+  "Catalogue never exceeds four columns.",
+  "Images remain contained and aligned.",
+  "Keyboard focus is always visible.",
+  "Layout remains usable at 200 percent zoom and reduced motion."
 ]

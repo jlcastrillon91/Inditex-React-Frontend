@@ -1,0 +1,28 @@
+[architecture]
+style = "Layered, feature-oriented React SPA"
+goal = "Keep routing, business features, and reusable infrastructure easy to locate and change."
+
+[folders]
+app = "Application bootstrap, router, global providers, and layouts."
+pages = "Route-level screens that compose features and shared UI."
+features = "Business capabilities containing their API, hooks, models, components, and tests."
+shared = "Feature-independent API, cache, configuration, layout, and UI primitives."
+test = "Global test setup; domain fixtures remain inside their feature."
+
+[dependencies]
+flow = "app -> pages -> features -> shared"
+rules = [
+  "Pages may compose features and shared modules.",
+  "Features may use shared modules but not pages or app internals.",
+  "Shared modules must not depend on app, pages, or features.",
+  "Components never call fetch or browser storage directly."
+]
+
+[state]
+server_data = "Feature hooks expose loading, success, error, and retry states."
+local_state = "Keep state in the closest component or hook that needs it."
+global_state = "Add Context or Redux Toolkit only when state is genuinely shared across unrelated routes."
+
+[testing]
+location = "Keep tests beside the source file; keep reusable feature fixtures in features/<name>/test."
+focus = "Test visible behavior, accessibility, data boundaries, and failure states."
