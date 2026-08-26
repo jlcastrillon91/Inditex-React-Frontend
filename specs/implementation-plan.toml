@@ -82,6 +82,7 @@ endpoint = "POST /api/cart"
 request_fields = ["id", "colorCode", "storageCode"]
 items = [
   "Always show storage and color selectors and default to the first option.",
+  "When storage options are absent, disable that selector and submit an empty storageCode.",
   "Prevent duplicate requests while submission is pending.",
   "Treat the returned count as authoritative and display it in the header.",
   "Persist the cart count safely in localStorage.",

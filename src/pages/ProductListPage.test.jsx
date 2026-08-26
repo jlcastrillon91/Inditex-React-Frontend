@@ -38,9 +38,9 @@ describe('ProductListPage', () => {
     renderPage()
 
     expect(
-      screen.getByRole('heading', { name: 'Mobile devices' }),
+      screen.getByRole('heading', { name: 'Find your next device' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Loading the latest devices…')).toBeInTheDocument()
+    expect(screen.getByText('Curating the latest devices…')).toBeInTheDocument()
     expect(
       screen.getByRole('status', { name: 'Loading products' }),
     ).toBeInTheDocument()
@@ -60,7 +60,9 @@ describe('ProductListPage', () => {
 
     renderPage()
 
-    expect(screen.getByText('2 devices available')).toBeInTheDocument()
+    expect(
+      screen.getByText('Explore 2 mobile devices selected for the collection.'),
+    ).toBeInTheDocument()
     expect(screen.getAllByRole('listitem')).toHaveLength(2)
   })
 
@@ -108,7 +110,7 @@ describe('ProductListPage', () => {
       { target: { value: 'google' } },
     )
 
-    expect(screen.getByText('1 matching device')).toBeInTheDocument()
+    expect(screen.getByText('Showing 1 matching device')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Pixel 9' })).toBeInTheDocument()
     expect(
       screen.queryByRole('heading', { name: 'Galaxy S24' }),
@@ -121,7 +123,7 @@ describe('ProductListPage', () => {
     expect(
       screen.getByRole('heading', { name: 'No matching devices' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('0 matching devices')).toBeInTheDocument()
+    expect(screen.getByText('Showing 0 matching devices')).toBeInTheDocument()
   })
 
   it('shows an empty state', () => {
@@ -138,7 +140,9 @@ describe('ProductListPage', () => {
     expect(
       screen.getByRole('heading', { name: 'No devices are available' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('0 devices available')).toBeInTheDocument()
+    expect(
+      screen.getByText('Explore 0 mobile devices selected for the collection.'),
+    ).toBeInTheDocument()
   })
 
   it('shows an error and retries the request', () => {

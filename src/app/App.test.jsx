@@ -17,7 +17,7 @@ describe('application shell', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('link', { name: /mobile store/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /itx mobile home/i })).toHaveAttribute(
       'href',
       '/',
     )

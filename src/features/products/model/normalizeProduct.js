@@ -41,7 +41,13 @@ function normalizeOptions(value) {
       code: option.code,
       name: normalizeRequiredText(option.name),
     }))
-    .filter((option) => option.code !== null && option.code !== undefined)
+    .filter(
+      (option) =>
+        option.code !== null &&
+        option.code !== undefined &&
+        option.code !== '' &&
+        option.name.trim() !== '',
+    )
 }
 
 export function normalizeProduct(product) {

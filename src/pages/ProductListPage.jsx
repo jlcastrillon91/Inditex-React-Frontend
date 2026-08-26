@@ -10,12 +10,12 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage'
 import { Pagination } from '@/shared/ui/Pagination'
 
 function getCatalogueDescription({ isLoading, search, totalResults }) {
-  if (isLoading) return 'Loading the latest devices…'
+  if (isLoading) return 'Curating the latest devices…'
 
   const label = totalResults === 1 ? 'device' : 'devices'
   return search
-    ? `${totalResults} matching ${label}`
-    : `${totalResults} ${label} available`
+    ? `Showing ${totalResults} matching ${label}`
+    : `Explore ${totalResults} mobile ${label} selected for the collection.`
 }
 
 export function ProductListPage() {
@@ -48,8 +48,9 @@ export function ProductListPage() {
           search,
           totalResults,
         })}
-        eyebrow="Catalogue"
-        title="Mobile devices"
+        eyebrow="The collection"
+        title="Find your next device"
+        variant="catalogue"
       />
 
       <section aria-label="Products" className="mt-10 sm:mt-12">

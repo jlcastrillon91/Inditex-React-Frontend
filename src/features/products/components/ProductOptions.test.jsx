@@ -58,6 +58,29 @@ describe('ProductOptions', () => {
     expect(screen.getByRole('button', { name: 'Add to cart' })).toBeDisabled()
   })
 
+  it('allows products without storage and submits an empty storage code', () => {
+    const onSubmit = vi.fn().mockResolvedValue(1)
+
+    render(
+      <ProductOptions
+        action={{ onSubmit }}
+        colors={[{ code: 1, name: 'Black' }]}
+        storageOptions={[]}
+      />,
+    )
+
+    expect(screen.getByRole('combobox', { name: 'Storage' })).toBeDisabled()
+    expect(screen.getByRole('option', { name: 'Not available' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add to cart' })).toBeEnabled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add to cart' }))
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      colorCode: 1,
+      storageCode: '',
+    })
+  })
+
   it('disables controls and communicates a pending request', () => {
     render(
       <ProductOptions

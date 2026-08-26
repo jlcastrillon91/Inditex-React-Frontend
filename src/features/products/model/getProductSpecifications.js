@@ -6,7 +6,10 @@ export function getProductSpecifications(product) {
   return [
     { label: 'Brand', value: formatValue(product.brand) },
     { label: 'Model', value: formatValue(product.model) },
-    { label: 'Price', value: formatCurrency(product.price) },
+    {
+      label: 'Price',
+      value: formatCurrency(product.price, { fallback: 'Price pending' }),
+    },
     { label: 'CPU', value: formatValue(product.cpu) },
     { label: 'RAM', value: formatValue(product.ram) },
     {

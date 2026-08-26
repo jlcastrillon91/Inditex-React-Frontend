@@ -1,6 +1,7 @@
 import { ShoppingBag } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
+import { AppLogo } from '@/app/layouts/AppLogo'
 import { useCart } from '@/features/cart'
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs'
 
@@ -25,14 +26,15 @@ export function Header() {
   const { pathname } = useLocation()
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b bg-background/90 shadow-[0_1px_0_rgba(0,0,0,0.02)] backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-18 items-center justify-between gap-6">
           <Link
-            className="text-lg font-semibold tracking-[0.18em] uppercase"
+            aria-label="ITX Mobile home"
+            className="rounded-sm transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
             to="/"
           >
-            Mobile Store
+            <AppLogo />
           </Link>
           <div
             aria-label={`${count} ${count === 1 ? 'item' : 'items'} in cart`}
@@ -47,7 +49,7 @@ export function Header() {
             </span>
           </div>
         </div>
-        <div className="border-t py-3">
+        <div className="border-t border-border/70 py-2.5">
           <Breadcrumbs items={getBreadcrumbItems(pathname)} />
         </div>
       </div>

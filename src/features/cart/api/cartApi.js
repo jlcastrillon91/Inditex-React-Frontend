@@ -10,6 +10,12 @@ function assertRequired(value, name) {
   }
 }
 
+function assertProvided(value, name) {
+  if (value === undefined || value === null) {
+    throw new TypeError(`${name} is required.`)
+  }
+}
+
 function getAuthoritativeCount(response) {
   if (!Number.isInteger(response?.count) || response.count < 0) {
     throw new TypeError('The cart API returned an invalid count.')
@@ -25,7 +31,7 @@ export const cartApi = {
   ) {
     assertRequired(productId, 'A product ID')
     assertRequired(colorCode, 'A color code')
-    assertRequired(storageCode, 'A storage code')
+    assertProvided(storageCode, 'A storage code')
 
     const response = await apiClient('/api/cart', {
       body: {

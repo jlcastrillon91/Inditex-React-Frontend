@@ -59,8 +59,11 @@ export function ProductOptions({
     onSubmit = () => undefined,
     reset = () => undefined,
   } = action
+  const hasStorageOptions = storageOptions.length > 0
   const canSubmit =
-    colorCode !== null && storageCode !== null && !isPending
+    colorCode !== null &&
+    (!hasStorageOptions || storageCode !== null) &&
+    !isPending
 
   function handleColorChange(code) {
     reset()
@@ -76,13 +79,21 @@ export function ProductOptions({
     event.preventDefault()
     if (!canSubmit) return
 
-    Promise.resolve(onSubmit({ colorCode, storageCode })).catch(() => {
+    Promise.resolve(
+      onSubmit({
+        colorCode,
+        storageCode: hasStorageOptions ? storageCode : '',
+      }),
+    ).catch(() => {
       // The mutation state renders the error; avoid an unhandled event promise.
     })
   }
 
   return (
-    <section aria-labelledby="product-options-title">
+    <section
+      aria-labelledby="product-options-title"
+      className="rounded-xl border border-primary/15 bg-primary/[0.035] p-5 shadow-[0_8px_30px_rgba(35,20,18,0.05)] sm:p-6"
+    >
       <h2
         className="text-xl font-semibold tracking-tight"
         id="product-options-title"
@@ -107,7 +118,7 @@ export function ProductOptions({
           />
         </div>
         <Button
-          className="mt-6 w-full"
+          className="mt-6 h-12 w-full rounded-lg shadow-[0_8px_20px_rgba(80,25,30,0.18)]"
           disabled={!canSubmit}
           size="lg"
           type="submit"

@@ -54,6 +54,19 @@ describe('cartApi', () => {
     ).resolves.toBe(0)
   })
 
+  it('sends an empty storage code for products without storage options', async () => {
+    apiClientMock.mockResolvedValue({ count: 1 })
+
+    await cartApi.addProduct({ ...product, storageCode: '' })
+
+    expect(apiClientMock).toHaveBeenCalledWith(
+      '/api/cart',
+      expect.objectContaining({
+        body: expect.objectContaining({ storageCode: '' }),
+      }),
+    )
+  })
+
   it.each([
     [{ colorCode: 1, storageCode: 2 }, 'A product ID is required.'],
     [

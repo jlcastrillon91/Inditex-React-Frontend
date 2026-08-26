@@ -25,21 +25,21 @@ describe('cache', () => {
     expect(cache.set('products', products)).toBe(true)
     expect(client.set).toHaveBeenCalledWith(
       'itx:cache:products',
-      { data: products, version: 1 },
+      { data: products, version: 2 },
       { ttl: 3600 },
     )
   })
 
   it('returns data from a valid cache entry', () => {
     const product = { id: '1' }
-    client.get.mockReturnValue({ data: product, version: 1 })
+    client.get.mockReturnValue({ data: product, version: 2 })
 
     expect(cache.get('product:1')).toBe(product)
     expect(client.get).toHaveBeenCalledWith('itx:cache:product:1')
   })
 
   it.each([0, false, null])('preserves the falsy value %s', (value) => {
-    client.get.mockReturnValue({ data: value, version: 1 })
+    client.get.mockReturnValue({ data: value, version: 2 })
 
     expect(cache.get('value')).toBe(value)
   })
@@ -62,7 +62,7 @@ describe('cache', () => {
     undefined,
     'invalid',
     [],
-    { version: 1 },
+    { version: 2 },
   ])('removes the malformed entry %j', (entry) => {
     client.get.mockReturnValue(entry)
 

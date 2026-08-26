@@ -4,7 +4,7 @@ import { Input } from '@/shared/ui/Input'
 
 export function ProductSearch({ disabled = false, onSearchChange, search }) {
   return (
-    <div className="relative w-full sm:w-80">
+    <div className="relative w-full sm:w-88">
       <label className="sr-only" htmlFor="product-search">
         Search products by brand or model
       </label>
@@ -13,7 +13,7 @@ export function ProductSearch({ disabled = false, onSearchChange, search }) {
         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
       />
       <Input
-        className="h-11 px-9 [&::-webkit-search-cancel-button]:appearance-none"
+        className="h-12 rounded-xl border-border/80 bg-card px-10 shadow-[0_2px_10px_rgba(0,0,0,0.04)] focus-visible:bg-background [&::-webkit-search-cancel-button]:appearance-none"
         disabled={disabled}
         id="product-search"
         onChange={(event) => onSearchChange(event.target.value)}

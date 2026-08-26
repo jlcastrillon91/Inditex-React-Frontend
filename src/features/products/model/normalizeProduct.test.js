@@ -113,6 +113,19 @@ describe('normalizeProduct', () => {
     expect(product.storageOptions).toEqual([{ code: '128', name: '128' }])
   })
 
+  it('discards empty API options instead of rendering blank selectors', () => {
+    const product = normalizeProduct({
+      colors: [{ code: 1, name: 'Black' }],
+      storages: [
+        { code: '', name: '' },
+        { code: 2, name: '   ' },
+      ],
+    })
+
+    expect(product.colors).toEqual([{ code: 1, name: 'Black' }])
+    expect(product.storageOptions).toEqual([])
+  })
+
   it('does not mutate the raw API object', () => {
     const product = {
       id: 1,

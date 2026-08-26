@@ -2,7 +2,7 @@ import storage from 'localstorage-slim'
 
 const DEFAULT_NAMESPACE = 'itx:cache'
 const DEFAULT_TTL_SECONDS = 60 * 60
-const DEFAULT_VERSION = 1
+const DEFAULT_VERSION = 2
 
 function isValidEntry(entry, version) {
   return (

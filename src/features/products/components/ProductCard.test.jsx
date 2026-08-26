@@ -60,6 +60,6 @@ describe('ProductCard', () => {
 
     expect(screen.getByText('Unknown brand')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Unknown model' })).toBeInTheDocument()
-    expect(screen.getByText('Price unavailable')).toBeInTheDocument()
+    expect(screen.getByText('Price pending')).toBeInTheDocument()
   })
 })

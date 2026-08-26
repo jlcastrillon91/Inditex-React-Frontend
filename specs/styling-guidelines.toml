@@ -18,10 +18,10 @@ surface_muted = "#F3F2EE"
 text = "#181816"
 text_muted = "#6B6963"
 border = "#E2E0DA"
-primary = "#181816"
+primary = "#7C2635"
 primary_foreground = "#FFFFFF"
 error = "#B42318"
-focus = "#3B82F6"
+focus = "#7C2635"
 
 [tokens]
 format = "Semantic CSS custom properties consumed by Tailwind."
@@ -53,6 +53,7 @@ rules = [
 [product_list]
 columns = "1 below 640px, 2 from 640px, 3 from 1024px, 4 from 1280px"
 rules = [
+  "Introduce the catalogue with a compact editorial hero containing title, result count, and search.",
   "Keep loading, empty, error, and no-results states inside the catalogue region.",
   "Keep grid geometry stable while results change.",
   "Stack full-width search below the title on mobile."
@@ -63,7 +64,7 @@ rules = [
   "Make the complete card a semantic product-details link.",
   "Use a square muted image area with object-fit contain.",
   "Show brand, model, and price below the image.",
-  "Keep cards flat with no permanent border or shadow.",
+  "Use a subtle surface border and shadow, with restrained hover elevation.",
   "Reserve image dimensions and provide a visible focus outline.",
   "Limit hover image scale to 1.02."
 ]
@@ -73,7 +74,7 @@ layout = "Two columns on desktop; one stacked column on mobile."
 rules = [
   "Use a large contained product image.",
   "Render specifications with a semantic description list and thin separators.",
-  "Group selectors with a strong full-width add-to-cart button."
+  "Group selectors in a lightly tinted purchase panel with a strong full-width add-to-cart button."
 ]
 
 [components]

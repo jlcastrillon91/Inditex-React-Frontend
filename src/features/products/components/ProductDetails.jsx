@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { ProductDescription } from '@/features/products/components/ProductDescription'
 import { ProductDetailImage } from '@/features/products/components/ProductDetailImage'
 import { ProductOptions } from '@/features/products/components/ProductOptions'
+import { ProductPrice } from '@/features/products/components/ProductPrice'
 import { PageHeader } from '@/shared/layout/PageHeader'
 
 function getProductName(product) {
@@ -22,9 +23,13 @@ export function ProductDetails({ cartAction, product }) {
         <ArrowLeft aria-hidden="true" className="size-4" />
         Back to products
       </Link>
-      <PageHeader eyebrow="Product" title={productName} />
+      <PageHeader
+        description={<ProductPrice value={product.price} />}
+        eyebrow="Product"
+        title={productName}
+      />
       <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+        <div className="aspect-square overflow-hidden rounded-xl border bg-card shadow-[0_16px_45px_rgba(35,20,18,0.08)]">
           <ProductDetailImage
             imageUrl={product.imageUrl}
             productName={productName}
