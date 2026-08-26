@@ -1,5 +1,6 @@
 [project]
 name = "inditex-react-frontend"
+specification_location = "specs/implementation-plan.toml"
 description = "Client-side React SPA for browsing mobile devices and adding configured products to a cart."
 language = "JavaScript ES6+"
 framework = "React"

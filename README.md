@@ -50,8 +50,9 @@ private `api`, `components`, `hooks`, `model`, `pages`, or `utils` modules.
 
 The UI uses Tailwind CSS 4, semantic HTML, small project-owned components, and
 individually imported Lucide icons. It intentionally does not use shadcn, Radix,
-CVA, CSS-in-JS, or a full component suite. See `implementation-plan.toml` for
-the complete technical specification and implementation order.
+CVA, CSS-in-JS, or a full component suite. See
+`specs/implementation-plan.toml` for the complete technical specification and
+implementation order, and `specs/styling-guidelines.toml` for the visual system.
 
 ## Environment
 

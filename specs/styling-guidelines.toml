@@ -1,0 +1,268 @@
+[guide]
+name = "Editorial Minimal Retail"
+version = 1
+status = "active"
+scope = "Product list, search, product details, shared application shell, and feedback states."
+objective = "Create a modern product-focused retail experience that remains accessible, lightweight, responsive, and easy to maintain."
+
+[principles]
+values = [
+  "Product imagery and product information take priority over interface decoration.",
+  "Use typography and whitespace to create hierarchy before adding containers or effects.",
+  "Design mobile-first and progressively enhance layouts for wider screens.",
+  "Prefer semantic HTML and native controls over JavaScript-driven replacements.",
+  "Use restrained motion that communicates interaction without delaying the user.",
+  "Keep every visual decision compatible with a small production bundle.",
+  "Use shared tokens and primitives to maintain consistency across future features."
+]
+
+[visual_identity]
+keywords = [
+  "editorial",
+  "product-focused",
+  "warm neutral",
+  "spacious",
+  "typographically clear",
+  "subtly interactive",
+  "mobile-first",
+  "accessible",
+  "fast"
+]
+personality = "Quiet confidence with subtle warmth; closer to a curated retail catalogue than a SaaS dashboard."
+
+[colors]
+background = "#FAFAF8"
+surface = "#FFFFFF"
+surface_muted = "#F3F2EE"
+text = "#181816"
+text_muted = "#6B6963"
+border = "#E2E0DA"
+primary = "#181816"
+primary_hover = "#353531"
+primary_foreground = "#FFFFFF"
+error = "#B42318"
+focus = "#3B82F6"
+
+[colors.rules]
+requirements = [
+  "Use product photography as the principal source of colour.",
+  "Use the primary colour for the main action and high-emphasis text only.",
+  "Do not introduce additional brand colours without a concrete product requirement.",
+  "Never communicate status through colour alone.",
+  "Verify text, borders, icons, and focus indicators against WCAG 2.2 contrast requirements."
+]
+
+[typography]
+font_family = "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+font_strategy = "Use system fonts to avoid external font requests and layout shifts."
+
+[typography.scale]
+page_title = "clamp(2.25rem, 4vw, 3rem); font-weight: 600; line-height: 1.05"
+section_title = "1.5rem; font-weight: 600; line-height: 1.2"
+product_model = "1rem; font-weight: 500; line-height: 1.4"
+product_price = "0.9375rem to 1rem; font-weight: 600"
+product_brand = "0.75rem; font-weight: 500; uppercase; letter-spacing: 0.12em"
+body = "0.9375rem to 1rem; line-height: 1.6"
+metadata = "0.8125rem to 0.875rem; line-height: 1.5"
+
+[typography.rules]
+requirements = [
+  "Use large display typography selectively; the catalogue does not need a marketing hero.",
+  "Limit body copy width to approximately 65 characters when practical.",
+  "Do not use font weight alone as the only distinction between interactive and static text.",
+  "Use tabular numbers for prices or counts when alignment benefits comparison."
+]
+
+[spacing]
+base_unit_px = 4
+scale_px = [4, 8, 12, 16, 24, 32, 48, 64]
+content_max_width_px = 1280
+mobile_page_padding_px = 16
+tablet_page_padding_px = 24
+desktop_page_padding_px = 32
+grid_gap_px = "16 to 24"
+section_gap_px = "32 to 48"
+
+[shape]
+standard_radius_px = 6
+image_radius_px = 8
+button_radius_px = "4 to 6"
+border_width_px = 1
+shadow_policy = "Use shadows only for floating overlays; product cards remain flat."
+
+[layout]
+content_container = "Centered, fluid width with a maximum width of 1280px."
+mobile_first = true
+requirements = [
+  "Avoid horizontal page scrolling at 320px viewport width.",
+  "Keep primary content aligned to the same container across the header, PLP, and PDP.",
+  "Use CSS Grid for product listings and the desktop product-detail split.",
+  "Use Flexbox for local alignment such as toolbars and metadata rows."
+]
+
+[header]
+height_px = 72
+position = "sticky"
+requirements = [
+  "Use a thin bottom border rather than a shadow.",
+  "Keep the application title visually compact and link it to the product list.",
+  "Place breadcrumbs in the shared header or immediately beneath it with consistent alignment.",
+  "Display the cart count with a concise accessible label.",
+  "Avoid oversized navigation or decorative header elements."
+]
+
+[product_list]
+requirements = [
+  "Place the page title and result count on the left and search on the right at desktop widths.",
+  "Stack search below the title and make it full width on mobile.",
+  "Render no more than four products per row.",
+  "Keep loading, empty, error, and filtered-empty states within the catalogue region.",
+  "Do not change the grid geometry when search results update."
+]
+
+[product_list.grid]
+mobile = "1 column below 640px"
+small_tablet = "2 columns from 640px"
+desktop = "3 columns from 1024px"
+wide_desktop = "4 columns from 1280px"
+
+[product_card]
+image_aspect_ratio = "1 / 1"
+image_fit = "contain"
+requirements = [
+  "Make the entire card a semantic link to the product details route.",
+  "Do not use an outer card border or permanent shadow.",
+  "Use a muted surface behind the product image.",
+  "Display brand, model, and price beneath the image in that hierarchy.",
+  "Reserve image dimensions to prevent layout shifts.",
+  "Use a visible focus outline around the complete interactive card.",
+  "Limit hover motion to a subtle image scale of no more than 1.02.",
+  "Do not hide required product information until hover."
+]
+
+[search]
+desktop_width_px = 320
+height_px = 44
+requirements = [
+  "Use an explicitly associated accessible label even when the visual label is hidden.",
+  "Use type='search' and a decorative Lucide search icon.",
+  "Provide a clear control when text exists.",
+  "Show a concise product count or filtered-results summary.",
+  "Do not trigger layout movement while filtering."
+]
+
+[product_details]
+desktop_layout = "Two balanced columns: image on the left, description and actions on the right."
+mobile_layout = "One stacked column: back link, image, description, actions."
+requirements = [
+  "Use a large muted image surface with object-fit contain.",
+  "Render specifications with semantic description-list markup.",
+  "Use thin separators rather than boxing every specification row.",
+  "Keep selectors and the Add button visually grouped.",
+  "Use a strong full-width primary Add button within the action area.",
+  "A sticky action column is allowed on desktop when it does not obscure content.",
+  "Keep the back-to-products link visible and keyboard accessible."
+]
+
+[controls]
+minimum_height_px = 44
+requirements = [
+  "Use native button, input, and select elements.",
+  "Provide visible hover, active, disabled, invalid, and focus-visible states.",
+  "Use the primary filled style for the single dominant page action.",
+  "Use outline or text styles for secondary actions.",
+  "Never remove native focus without providing a stronger replacement."
+]
+
+[feedback_states]
+loading = "Use skeletons matching the final content dimensions to prevent layout shift."
+empty = "Use a concise heading and explanation without decorative illustration dependencies."
+error = "State what failed in plain language and provide a Retry button when recovery is possible."
+success = "Use immediate inline or live-region feedback; add a toast library only if later interaction design requires it."
+image_failure = "Use a quiet placeholder that preserves the image region and product name."
+
+[motion]
+duration_ms = "150 to 200"
+allowed = [
+  "button colour transitions",
+  "focus and hover transitions",
+  "product image scale up to 1.02",
+  "skeleton pulse"
+]
+prohibited = [
+  "parallax",
+  "autoplay carousels",
+  "large page-transition libraries",
+  "layout-shifting entrance animations",
+  "decorative continuous motion"
+]
+respect_reduced_motion = true
+
+[images]
+requirements = [
+  "Include explicit width and height attributes or an equivalent CSS aspect ratio.",
+  "Use meaningful alt text in the form '<brand> <model>'.",
+  "Use loading='lazy' and decoding='async' for offscreen list images.",
+  "Do not lazy-load the likely Largest Contentful Paint image.",
+  "Use responsive image sources when the origin service provides appropriate variants.",
+  "Avoid client-side image libraries when CSS object-fit is sufficient."
+]
+
+[accessibility]
+target = "WCAG 2.2 AA"
+requirements = [
+  "Use semantic landmarks, headings, lists, links, buttons, labels, and description lists.",
+  "Provide full keyboard navigation in logical DOM order.",
+  "Ensure focus is never hidden beneath sticky content.",
+  "Use visible focus indicators with sufficient area and contrast.",
+  "Maintain minimum practical touch targets of 44px even when WCAG exceptions would allow less.",
+  "Announce asynchronous errors and cart feedback with appropriate live regions.",
+  "Verify the interface at 200 percent browser zoom."
+]
+
+[performance]
+requirements = [
+  "Use Tailwind CSS utilities and native elements without a CSS-in-JS runtime.",
+  "Import Lucide icons individually.",
+  "Do not add a component or animation library for one small interaction.",
+  "Lazy-load future routes when feature growth creates meaningful chunks.",
+  "Measure production CSS and JavaScript gzip sizes after each UI milestone.",
+  "Prevent cumulative layout shift by reserving space for images and loading states."
+]
+
+[prohibited_patterns]
+items = [
+  "glassmorphism",
+  "large decorative gradients",
+  "deep permanent card shadows",
+  "excessive rounded containers",
+  "autoplay media",
+  "oversized catalogue hero sections",
+  "multiple competing accent colours",
+  "hidden hover-only product information",
+  "tiny controls",
+  "low-contrast grey text",
+  "decorative animation dependencies",
+  "dashboard-style boxed layouts"
+]
+
+[quality_assurance]
+viewports_px = [320, 375, 768, 1024, 1280, 1440]
+checks = [
+  "No horizontal overflow.",
+  "Grid uses the expected number of columns without exceeding four.",
+  "Product images remain contained and visually aligned.",
+  "Text remains legible and unclipped at 200 percent zoom.",
+  "All interactive controls have visible keyboard focus.",
+  "Hover-only devices and touch devices both receive complete functionality.",
+  "Loading states preserve final layout dimensions.",
+  "Reduced-motion preference disables nonessential motion.",
+  "Production bundle size remains proportionate to the implemented functionality."
+]
+
+[references]
+sources = [
+  "Baymard Institute Product Lists and Filtering UX research",
+  "W3C Web Content Accessibility Guidelines 2.2",
+  "web.dev responsive image guidance"
+]
