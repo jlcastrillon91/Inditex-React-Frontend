@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 
+import { useAddProduct } from '@/features/cart'
 import { ProductDetails } from '@/features/products/components/ProductDetails'
 import { useProduct } from '@/features/products/hooks/useProduct'
 import { Container } from '@/shared/layout/Container'
@@ -9,6 +10,7 @@ import { Skeleton } from '@/shared/ui/Skeleton'
 
 export function ProductDetailsPage() {
   const { productId } = useParams()
+  const cartMutation = useAddProduct()
   const { error, isError, isLoading, isSuccess, product, retry } =
     useProduct(productId)
 
@@ -44,7 +46,22 @@ export function ProductDetailsPage() {
       ) : null}
 
       {isSuccess && product ? (
-        <ProductDetails product={product} />
+        <ProductDetails
+          cartAction={{
+            error: cartMutation.error,
+            isPending: cartMutation.isPending,
+            isSuccess: cartMutation.isSuccess,
+            onSubmit: ({ colorCode, storageCode }) =>
+              cartMutation.addProduct({
+                colorCode,
+                productId: product.id,
+                storageCode,
+              }),
+            reset: cartMutation.reset,
+          }}
+          key={product.id}
+          product={product}
+        />
       ) : null}
     </Container>
   )

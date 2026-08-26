@@ -57,6 +57,7 @@ items = [
 
 [requirements.product_details]
 endpoint = "GET /api/product/:id"
+development_note = "React StrictMode may abort the first detail request and repeat it during development; this validates effect cleanup and does not occur in production."
 attributes = [
   "brand",
   "model",
@@ -157,11 +158,11 @@ done_when = "Valid, missing, loading, and failed products render controlled stat
 [[milestones]]
 order = 7
 name = "Cart"
-status = "in_progress"
+status = "complete"
 work = [
   "Implement shared cart count, persistence, selectors, add-to-cart request, pending protection, and feedback."
 ]
-progress = "The validated add-product API, persistent CartProvider state, storage adapter, useCart hook, and global header count are complete; UI submission remains pending."
+progress = "The add-product API, persistent cart state, header count, encapsulated mutation hook, configured submission, pending protection, and accessible feedback are complete."
 done_when = "A successful request updates and persists the authoritative header count."
 
 [[milestones]]

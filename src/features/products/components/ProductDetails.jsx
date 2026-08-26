@@ -10,7 +10,7 @@ function getProductName(product) {
   return [product.brand, product.model].filter(Boolean).join(' ') || 'Unnamed product'
 }
 
-export function ProductDetails({ product }) {
+export function ProductDetails({ cartAction, product }) {
   const productName = getProductName(product)
 
   return (
@@ -33,6 +33,7 @@ export function ProductDetails({ product }) {
         <div className="space-y-10">
           <ProductDescription product={product} />
           <ProductOptions
+            action={cartAction}
             colors={product.colors}
             key={product.id}
             storageOptions={product.storageOptions}

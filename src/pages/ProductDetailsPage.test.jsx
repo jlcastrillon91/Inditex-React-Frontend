@@ -4,12 +4,19 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ProductDetailsPage } from '@/pages/ProductDetailsPage'
 
-const { useProductMock } = vi.hoisted(() => ({
+const { addProductMock, resetCartMutationMock, useAddProductMock, useProductMock } =
+  vi.hoisted(() => ({
+  addProductMock: vi.fn(),
+  resetCartMutationMock: vi.fn(),
+  useAddProductMock: vi.fn(),
   useProductMock: vi.fn(),
-}))
+  }))
 
 vi.mock('@/features/products/hooks/useProduct', () => ({
   useProduct: useProductMock,
+}))
+vi.mock('@/features/cart', () => ({
+  useAddProduct: useAddProductMock,
 }))
 
 function renderPage(productId = 'product-123') {
@@ -24,6 +31,15 @@ function renderPage(productId = 'product-123') {
 
 describe('ProductDetailsPage', () => {
   beforeEach(() => {
+    addProductMock.mockReset().mockResolvedValue(1)
+    resetCartMutationMock.mockReset()
+    useAddProductMock.mockReset().mockReturnValue({
+      addProduct: addProductMock,
+      error: null,
+      isPending: false,
+      isSuccess: false,
+      reset: resetCartMutationMock,
+    })
     useProductMock.mockReset()
   })
 
@@ -36,10 +52,11 @@ describe('ProductDetailsPage', () => {
       product: {
         battery: null,
         brand: 'Samsung',
-        colors: [],
+        colors: [{ code: 1, name: 'Black' }],
         cpu: null,
         dimensions: null,
         displayResolution: null,
+        id: 'product-123',
         imageUrl: 'https://example.com/galaxy-s24.jpg',
         model: 'Galaxy S24',
         operatingSystem: null,
@@ -47,7 +64,7 @@ describe('ProductDetailsPage', () => {
         primaryCamera: [],
         ram: null,
         secondaryCamera: [],
-        storageOptions: [],
+        storageOptions: [{ code: 2, name: '128 GB' }],
         weight: null,
       },
       retry: vi.fn(),
@@ -62,6 +79,14 @@ describe('ProductDetailsPage', () => {
     expect(
       screen.getByRole('img', { name: 'Samsung Galaxy S24' }),
     ).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add to cart' }))
+
+    expect(addProductMock).toHaveBeenCalledWith({
+      colorCode: 1,
+      productId: 'product-123',
+      storageCode: 2,
+    })
   })
 
   it('shows a product loading state', () => {
@@ -125,6 +150,7 @@ describe('ProductDetailsPage', () => {
       product: {
         brand: '',
         colors: [],
+        id: 'unnamed',
         imageUrl: null,
         model: '',
         price: null,
