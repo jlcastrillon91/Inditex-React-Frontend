@@ -3,12 +3,9 @@ import { createElement } from 'react'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 
-import {
-  PRODUCTS_PER_PAGE,
-  useProductPagination,
-} from '@/features/products/hooks/useProductPagination'
+import { usePagination } from '@/shared/hooks/usePagination'
 
-const products = Array.from({ length: 25 }, (_, index) => ({
+const items = Array.from({ length: 25 }, (_, index) => ({
   id: String(index + 1),
 }))
 
@@ -18,29 +15,27 @@ function createWrapper(initialEntry = '/') {
   }
 }
 
-describe('useProductPagination', () => {
-  it('returns the requested page of products', () => {
+describe('usePagination', () => {
+  it('returns the requested page of items', () => {
     const { result } = renderHook(
       () => ({
         location: useLocation(),
-        pagination: useProductPagination(products),
+        pagination: usePagination({ items, pageSize: 12 }),
       }),
       { wrapper: createWrapper('/?page=2') },
     )
 
     expect(result.current.pagination.currentPage).toBe(2)
     expect(result.current.pagination.pageCount).toBe(3)
-    expect(result.current.pagination.visibleProducts).toHaveLength(
-      PRODUCTS_PER_PAGE,
-    )
-    expect(result.current.pagination.visibleProducts[0].id).toBe('13')
+    expect(result.current.pagination.visibleItems).toHaveLength(12)
+    expect(result.current.pagination.visibleItems[0].id).toBe('13')
   })
 
   it('updates the URL while preserving other query parameters', () => {
     const { result } = renderHook(
       () => ({
         location: useLocation(),
-        pagination: useProductPagination(products),
+        pagination: usePagination({ items, pageSize: 12 }),
       }),
       { wrapper: createWrapper('/?search=acer') },
     )
@@ -54,7 +49,7 @@ describe('useProductPagination', () => {
     const { result } = renderHook(
       () => ({
         location: useLocation(),
-        pagination: useProductPagination(products),
+        pagination: usePagination({ items, pageSize: 12 }),
       }),
       { wrapper: createWrapper('/?search=acer&page=2') },
     )
@@ -68,7 +63,7 @@ describe('useProductPagination', () => {
     const { result } = renderHook(
       () => ({
         location: useLocation(),
-        pagination: useProductPagination(products),
+        pagination: usePagination({ items, pageSize: 12 }),
       }),
       { wrapper: createWrapper('/?page=99') },
     )

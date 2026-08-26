@@ -138,7 +138,7 @@ done_when = "Every API product renders accessibly from one to four columns."
 [[milestones]]
 order = 5
 name = "Product search"
-status = "pending"
+status = "complete"
 work = [
   "Add an accessible search input, URL query synchronization, filtering, count, and no-results state."
 ]

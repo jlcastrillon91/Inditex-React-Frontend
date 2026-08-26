@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-export const PRODUCTS_PER_PAGE = 12
-
 function parsePage(value) {
   if (!/^\d+$/.test(value || '')) return 1
 
@@ -10,23 +8,25 @@ function parsePage(value) {
   return Number.isSafeInteger(page) && page > 0 ? page : 1
 }
 
-export function useProductPagination(
-  products,
-  { enabled = true, pageSize = PRODUCTS_PER_PAGE } = {},
-) {
+export function usePagination({
+  enabled = true,
+  items,
+  pageParam = 'page',
+  pageSize = 10,
+}) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const pageCount = Math.max(1, Math.ceil(products.length / pageSize))
-  const requestedPage = parsePage(searchParams.get('page'))
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize))
+  const requestedPage = parsePage(searchParams.get(pageParam))
   const currentPage = Math.min(requestedPage, pageCount)
   const startIndex = (currentPage - 1) * pageSize
-  const visibleProducts = products.slice(startIndex, startIndex + pageSize)
+  const visibleItems = items.slice(startIndex, startIndex + pageSize)
 
   function setPage(page) {
     const nextPage = Math.min(Math.max(1, page), pageCount)
     const nextSearchParams = new URLSearchParams(searchParams)
 
-    if (nextPage === 1) nextSearchParams.delete('page')
-    else nextSearchParams.set('page', String(nextPage))
+    if (nextPage === 1) nextSearchParams.delete(pageParam)
+    else nextSearchParams.set(pageParam, String(nextPage))
 
     setSearchParams(nextSearchParams)
   }
@@ -34,17 +34,17 @@ export function useProductPagination(
   useEffect(() => {
     if (!enabled) return
 
-    const rawPage = searchParams.get('page')
+    const rawPage = searchParams.get(pageParam)
     const canonicalPage = currentPage === 1 ? null : String(currentPage)
 
     if (rawPage === canonicalPage) return
 
     const nextSearchParams = new URLSearchParams(searchParams)
-    if (canonicalPage) nextSearchParams.set('page', canonicalPage)
-    else nextSearchParams.delete('page')
+    if (canonicalPage) nextSearchParams.set(pageParam, canonicalPage)
+    else nextSearchParams.delete(pageParam)
 
     setSearchParams(nextSearchParams, { replace: true })
-  }, [currentPage, enabled, searchParams, setSearchParams])
+  }, [currentPage, enabled, pageParam, searchParams, setSearchParams])
 
-  return { currentPage, pageCount, setPage, visibleProducts }
+  return { currentPage, pageCount, setPage, visibleItems }
 }

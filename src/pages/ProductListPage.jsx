@@ -1,6 +1,7 @@
 import { ProductGrid } from '@/features/products/components/ProductGrid'
 import { ProductGridSkeleton } from '@/features/products/components/ProductGridSkeleton'
-import { useProductPagination } from '@/features/products/hooks/useProductPagination'
+import { ProductSearch } from '@/features/products/components/ProductSearch'
+import { useProductCatalogue } from '@/features/products/hooks/useProductCatalogue'
 import { useProducts } from '@/features/products/hooks/useProducts'
 import { Container } from '@/shared/layout/Container'
 import { PageHeader } from '@/shared/layout/PageHeader'
@@ -8,22 +9,45 @@ import { EmptyState } from '@/shared/ui/EmptyState'
 import { ErrorMessage } from '@/shared/ui/ErrorMessage'
 import { Pagination } from '@/shared/ui/Pagination'
 
-function getCatalogueDescription({ isLoading, products }) {
+function getCatalogueDescription({ isLoading, search, totalResults }) {
   if (isLoading) return 'Loading the latest devices…'
 
-  const label = products.length === 1 ? 'device' : 'devices'
-  return `${products.length} ${label} available`
+  const label = totalResults === 1 ? 'device' : 'devices'
+  return search
+    ? `${totalResults} matching ${label}`
+    : `${totalResults} ${label} available`
 }
 
 export function ProductListPage() {
   const { error, isError, isLoading, products, retry } = useProducts()
-  const { currentPage, pageCount, setPage, visibleProducts } =
-    useProductPagination(products, { enabled: !isLoading && !isError })
+  const {
+    currentPage,
+    pageCount,
+    search,
+    setPage,
+    setSearch,
+    totalResults,
+    visibleProducts,
+  } = useProductCatalogue({
+    enabled: !isLoading && !isError,
+    products,
+  })
 
   return (
     <Container as="main" className="py-10 sm:py-14">
       <PageHeader
-        description={getCatalogueDescription({ isLoading, products })}
+        actions={
+          <ProductSearch
+            disabled={isLoading || isError || products.length === 0}
+            onSearchChange={setSearch}
+            search={search}
+          />
+        }
+        description={getCatalogueDescription({
+          isLoading,
+          search,
+          totalResults,
+        })}
         eyebrow="Catalogue"
         title="Mobile devices"
       />
@@ -48,7 +72,14 @@ export function ProductListPage() {
           />
         ) : null}
 
-        {!isLoading && !isError && products.length > 0 ? (
+        {!isLoading && !isError && products.length > 0 && totalResults === 0 ? (
+          <EmptyState
+            description="Try another brand or model, or clear your search."
+            title="No matching devices"
+          />
+        ) : null}
+
+        {!isLoading && !isError && totalResults > 0 ? (
           <>
             <ProductGrid products={visibleProducts} />
             <div className="mt-12">

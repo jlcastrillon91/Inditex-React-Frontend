@@ -88,6 +88,42 @@ describe('ProductListPage', () => {
     expect(screen.getByLabelText('Go to next page')).toBeDisabled()
   })
 
+  it('filters by brand and shows a no-results state', () => {
+    useProductsMock.mockReturnValue({
+      error: null,
+      isError: false,
+      isLoading: false,
+      products: [
+        createProductFixture(),
+        createProductFixture({ brand: 'Google', id: '2', model: 'Pixel 9' }),
+      ],
+      retry: vi.fn(),
+    })
+    renderPage()
+
+    fireEvent.change(
+      screen.getByRole('searchbox', {
+        name: 'Search products by brand or model',
+      }),
+      { target: { value: 'google' } },
+    )
+
+    expect(screen.getByText('1 matching device')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Pixel 9' })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: 'Galaxy S24' }),
+    ).not.toBeInTheDocument()
+
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'Nokia' },
+    })
+
+    expect(
+      screen.getByRole('heading', { name: 'No matching devices' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('0 matching devices')).toBeInTheDocument()
+  })
+
   it('shows an empty state', () => {
     useProductsMock.mockReturnValue({
       error: null,
