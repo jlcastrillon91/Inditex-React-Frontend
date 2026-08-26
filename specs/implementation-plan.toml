@@ -147,10 +147,11 @@ done_when = "Search matches brand and model and survives navigation."
 [[milestones]]
 order = 6
 name = "Product details"
-status = "pending"
+status = "in_progress"
 work = [
   "Implement the detail route, responsive description, required attributes, selectors, and fallbacks."
 ]
+progress = "Product fetching, route, name heading, loading, not-found, and retry states are complete."
 done_when = "Valid, missing, loading, and failed products render controlled states."
 
 [[milestones]]
