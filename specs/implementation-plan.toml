@@ -50,6 +50,7 @@ items = [
   "Display every product with image, brand, model, and price.",
   "Make each product a semantic link to /product/:productId.",
   "Use a responsive grid with no more than four columns.",
+  "Paginate filtered results by 12 products and persist the page in the URL.",
   "Filter by brand and model in real time and case-insensitively.",
   "Persist the search query in the URL and show a no-results state."
 ]
@@ -130,7 +131,7 @@ order = 4
 name = "Product list"
 status = "complete"
 work = [
-  "Implement the responsive product grid, cards, image fallback, skeleton, and page states."
+  "Implement the responsive product grid, cards, image fallback, skeleton, page states, and URL-controlled pagination."
 ]
 done_when = "Every API product renders accessibly from one to four columns."
 

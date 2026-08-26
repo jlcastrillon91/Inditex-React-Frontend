@@ -1,10 +1,12 @@
 import { ProductGrid } from '@/features/products/components/ProductGrid'
 import { ProductGridSkeleton } from '@/features/products/components/ProductGridSkeleton'
+import { useProductPagination } from '@/features/products/hooks/useProductPagination'
 import { useProducts } from '@/features/products/hooks/useProducts'
 import { Container } from '@/shared/layout/Container'
 import { PageHeader } from '@/shared/layout/PageHeader'
 import { EmptyState } from '@/shared/ui/EmptyState'
 import { ErrorMessage } from '@/shared/ui/ErrorMessage'
+import { Pagination } from '@/shared/ui/Pagination'
 
 function getCatalogueDescription({ isLoading, products }) {
   if (isLoading) return 'Loading the latest devices…'
@@ -15,6 +17,8 @@ function getCatalogueDescription({ isLoading, products }) {
 
 export function ProductListPage() {
   const { error, isError, isLoading, products, retry } = useProducts()
+  const { currentPage, pageCount, setPage, visibleProducts } =
+    useProductPagination(products, { enabled: !isLoading && !isError })
 
   return (
     <Container as="main" className="py-10 sm:py-14">
@@ -45,7 +49,16 @@ export function ProductListPage() {
         ) : null}
 
         {!isLoading && !isError && products.length > 0 ? (
-          <ProductGrid products={products} />
+          <>
+            <ProductGrid products={visibleProducts} />
+            <div className="mt-12">
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={setPage}
+                pageCount={pageCount}
+              />
+            </div>
+          </>
         ) : null}
       </section>
     </Container>

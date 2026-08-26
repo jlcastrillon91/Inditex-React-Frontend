@@ -64,6 +64,30 @@ describe('ProductListPage', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(2)
   })
 
+  it('shows only the first twelve products and paginates the catalogue', () => {
+    const products = Array.from({ length: 13 }, (_, index) =>
+      createProductFixture({ id: String(index + 1), model: `Phone ${index + 1}` }),
+    )
+    useProductsMock.mockReturnValue({
+      error: null,
+      isError: false,
+      isLoading: false,
+      products,
+      retry: vi.fn(),
+    })
+
+    renderPage()
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(12)
+    expect(screen.getByRole('heading', { name: 'Phone 1' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Phone 13' })).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText('Go to next page'))
+
+    expect(screen.getByRole('heading', { name: 'Phone 13' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Go to next page')).toBeDisabled()
+  })
+
   it('shows an empty state', () => {
     useProductsMock.mockReturnValue({
       error: null,
