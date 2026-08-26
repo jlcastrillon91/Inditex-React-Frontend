@@ -33,7 +33,23 @@ describe('ProductDetailsPage', () => {
       isError: false,
       isLoading: false,
       isSuccess: true,
-      product: { brand: 'Samsung', model: 'Galaxy S24' },
+      product: {
+        battery: null,
+        brand: 'Samsung',
+        colors: [],
+        cpu: null,
+        dimensions: null,
+        displayResolution: null,
+        imageUrl: 'https://example.com/galaxy-s24.jpg',
+        model: 'Galaxy S24',
+        operatingSystem: null,
+        price: 799,
+        primaryCamera: [],
+        ram: null,
+        secondaryCamera: [],
+        storageOptions: [],
+        weight: null,
+      },
       retry: vi.fn(),
     })
 
@@ -42,6 +58,9 @@ describe('ProductDetailsPage', () => {
     expect(useProductMock).toHaveBeenCalledWith('product-123')
     expect(
       screen.getByRole('heading', { name: 'Samsung Galaxy S24' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: 'Samsung Galaxy S24' }),
     ).toBeInTheDocument()
   })
 
@@ -103,7 +122,16 @@ describe('ProductDetailsPage', () => {
       isError: false,
       isLoading: false,
       isSuccess: true,
-      product: { brand: '', model: '' },
+      product: {
+        brand: '',
+        colors: [],
+        imageUrl: null,
+        model: '',
+        price: null,
+        primaryCamera: [],
+        secondaryCamera: [],
+        storageOptions: [],
+      },
       retry: vi.fn(),
     })
 

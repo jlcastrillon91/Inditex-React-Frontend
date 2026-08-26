@@ -151,7 +151,7 @@ status = "in_progress"
 work = [
   "Implement the detail route, responsive description, required attributes, selectors, and fallbacks."
 ]
-progress = "Product fetching, route, name heading, loading, not-found, and retry states are complete."
+progress = "Product fetching, route, responsive two-column presentation, required attributes, image fallback, back link, local selectors, loading, not-found, and retry states are complete; cart submission remains pending."
 done_when = "Valid, missing, loading, and failed products render controlled states."
 
 [[milestones]]

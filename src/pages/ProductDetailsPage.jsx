@@ -1,15 +1,11 @@
 import { useParams } from 'react-router-dom'
 
+import { ProductDetails } from '@/features/products/components/ProductDetails'
 import { useProduct } from '@/features/products/hooks/useProduct'
 import { Container } from '@/shared/layout/Container'
-import { PageHeader } from '@/shared/layout/PageHeader'
 import { EmptyState } from '@/shared/ui/EmptyState'
 import { ErrorMessage } from '@/shared/ui/ErrorMessage'
 import { Skeleton } from '@/shared/ui/Skeleton'
-
-function getProductName(product) {
-  return [product.brand, product.model].filter(Boolean).join(' ') || 'Unnamed product'
-}
 
 export function ProductDetailsPage() {
   const { productId } = useParams()
@@ -22,6 +18,7 @@ export function ProductDetailsPage() {
         <section aria-label="Loading product" role="status">
           <Skeleton className="h-4 w-20" />
           <Skeleton className="mt-4 h-12 w-full max-w-lg" />
+          <Skeleton className="mt-18 aspect-square w-full rounded-lg lg:w-1/2" />
         </section>
       ) : null}
 
@@ -47,7 +44,7 @@ export function ProductDetailsPage() {
       ) : null}
 
       {isSuccess && product ? (
-        <PageHeader eyebrow="Product" title={getProductName(product)} />
+        <ProductDetails product={product} />
       ) : null}
     </Container>
   )

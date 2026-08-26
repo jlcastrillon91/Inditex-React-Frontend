@@ -1,16 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { ProductImage } from '@/features/products/components/ProductImage'
-
-const priceFormatter = new Intl.NumberFormat('en-IE', {
-  currency: 'EUR',
-  maximumFractionDigits: 2,
-  style: 'currency',
-})
-
-function formatPrice(price) {
-  return price === null ? 'Price unavailable' : priceFormatter.format(price)
-}
+import { formatCurrency } from '@/shared/formatters/formatCurrency'
 
 export function ProductCard({ product }) {
   const productName = [product.brand, product.model].filter(Boolean).join(' ')
@@ -34,7 +25,7 @@ export function ProductCard({ product }) {
               {product.model || 'Unknown model'}
             </h2>
             <p className="shrink-0 text-sm font-semibold tabular-nums">
-              {formatPrice(product.price)}
+              {formatCurrency(product.price, { fallback: 'Price unavailable' })}
             </p>
           </div>
         </div>
