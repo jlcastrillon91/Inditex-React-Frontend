@@ -19,7 +19,10 @@ function getAuthoritativeCount(response) {
 }
 
 export const cartApi = {
-  async addProduct({ colorCode, productId, signal, storageCode } = {}) {
+  async addProduct(
+    { colorCode, productId, storageCode } = {},
+    { signal } = {},
+  ) {
     assertRequired(productId, 'A product ID')
     assertRequired(colorCode, 'A color code')
     assertRequired(storageCode, 'A storage code')

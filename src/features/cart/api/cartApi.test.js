@@ -38,7 +38,7 @@ describe('cartApi', () => {
     const controller = new AbortController()
     apiClientMock.mockResolvedValue({ count: 1 })
 
-    await cartApi.addProduct({ ...product, signal: controller.signal })
+    await cartApi.addProduct(product, { signal: controller.signal })
 
     expect(apiClientMock).toHaveBeenCalledWith(
       '/api/cart',
