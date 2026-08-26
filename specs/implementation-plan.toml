@@ -147,20 +147,21 @@ done_when = "Search matches brand and model and survives navigation."
 [[milestones]]
 order = 6
 name = "Product details"
-status = "in_progress"
+status = "complete"
 work = [
   "Implement the detail route, responsive description, required attributes, selectors, and fallbacks."
 ]
-progress = "Product fetching, route, responsive two-column presentation, required attributes, image fallback, back link, local selectors, loading, not-found, and retry states are complete; cart submission remains pending."
+progress = "Product fetching, route, responsive presentation, required attributes, image fallback, back link, local selectors, loading, not-found, and retry states are complete."
 done_when = "Valid, missing, loading, and failed products render controlled states."
 
 [[milestones]]
 order = 7
 name = "Cart"
-status = "pending"
+status = "in_progress"
 work = [
   "Implement shared cart count, persistence, selectors, add-to-cart request, pending protection, and feedback."
 ]
+progress = "The validated add-product API service and tests are complete; React state, persistence, header count, and UI submission remain pending."
 done_when = "A successful request updates and persists the authoritative header count."
 
 [[milestones]]
