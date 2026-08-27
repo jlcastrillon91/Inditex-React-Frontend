@@ -173,7 +173,7 @@ status = "complete"
 work = [
   "Verify accessibility, responsive layouts, cache behavior, cart persistence, tests, lint, build, and README."
 ]
-progress = "Lint, 152 tests, production build, responsive layouts, URL search and pagination, product detail, cart feedback, and persistence are verified."
+progress = "Lint, 163 tests, production build, responsive layouts, URL search and pagination, product detail, cart feedback, and persistence are verified."
 done_when = "The complete user journey passes automated and browser checks."
 
 [delivery]
