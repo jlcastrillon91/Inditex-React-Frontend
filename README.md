@@ -60,6 +60,12 @@ The application-level `ThemeProvider` accepts `font`, `primaryColor`, and
 custom properties, keeping feature components independent from the theme
 implementation.
 
+### Scaling state management
+
+For a larger application, add Redux Toolkit when unrelated routes need shared,
+complex state. Keep one slice per feature, local UI state in components, and use
+RTK Query if server-state requirements outgrow the current hooks and cache.
+
 ## Environment
 
 `VITE_API_BASE_URL` defines the API origin. The development example points to:
@@ -70,9 +76,24 @@ https://itx-frontend-test.onrender.com
 
 Do not commit local `.env` files.
 
+## Production deployment
+
+1. Configure `VITE_API_BASE_URL` in the hosting environment.
+2. Run `npm ci`, `npm run lint`, `npm run test`, and `npm run build` in CI.
+3. Publish the generated `dist/` directory to a static host.
+4. Configure an `index.html` fallback for SPA routes.
+5. Verify HTTPS, errors, accessibility, responsive behavior, and bundle size.
+
+Use the pinned Node LTS version and lockfile. Never place secrets in `VITE_*`
+variables because they are included in the client bundle.
+
 ## Development notes
 
 React Strict Mode intentionally runs effect setup and cleanup twice in
 development. A product-detail GET may therefore appear once as cancelled and
 once as successful in browser developer tools. The cleanup validates request
 cancellation; production performs a single request.
+
+The provided cart endpoint currently returns `count: 1` for every addition, and
+the specification does not define duplicate-product behavior. The UI treats
+the API response as the source of truth and displays the returned count.
