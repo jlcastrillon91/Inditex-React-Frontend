@@ -67,6 +67,8 @@ describe('ProductListPage', () => {
   })
 
   it('shows only the first twelve products and paginates the catalogue', () => {
+    const scrollIntoView = vi.fn()
+    Element.prototype.scrollIntoView = scrollIntoView
     const products = Array.from({ length: 13 }, (_, index) =>
       createProductFixture({ id: String(index + 1), model: `Phone ${index + 1}` }),
     )
@@ -88,6 +90,10 @@ describe('ProductListPage', () => {
 
     expect(screen.getByRole('heading', { name: 'Phone 13' })).toBeInTheDocument()
     expect(screen.getByLabelText('Go to next page')).toBeDisabled()
+    expect(scrollIntoView).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      block: 'start',
+    })
   })
 
   it('filters by brand and shows a no-results state', () => {

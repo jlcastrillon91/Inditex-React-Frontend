@@ -51,6 +51,7 @@ items = [
   "Make each product a semantic link to /product/:productId.",
   "Use a responsive grid with no more than four columns.",
   "Paginate filtered results by 12 products and persist the page in the URL.",
+  "After an explicit page change, scroll the catalogue into view while respecting reduced motion.",
   "Filter by brand and model in real time and case-insensitively.",
   "Persist the search query in the URL and show a no-results state."
 ]

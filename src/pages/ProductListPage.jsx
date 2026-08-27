@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { ProductGrid } from '@/features/products/components/ProductGrid'
 import { ProductGridSkeleton } from '@/features/products/components/ProductGridSkeleton'
 import { ProductSearch } from '@/features/products/components/ProductSearch'
@@ -19,6 +21,8 @@ function getCatalogueDescription({ isLoading, search, totalResults }) {
 }
 
 export function ProductListPage() {
+  const catalogueRef = useRef(null)
+  const shouldScrollRef = useRef(false)
   const { error, isError, isLoading, products, retry } = useProducts()
   const {
     currentPage,
@@ -32,6 +36,27 @@ export function ProductListPage() {
     enabled: !isLoading && !isError,
     products,
   })
+
+  function handlePageChange(page) {
+    if (page === currentPage) return
+
+    shouldScrollRef.current = true
+    setPage(page)
+  }
+
+  useEffect(() => {
+    if (!shouldScrollRef.current) return
+
+    shouldScrollRef.current = false
+    const prefersReducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    catalogueRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  }, [currentPage])
 
   return (
     <Container as="main" className="py-10 sm:py-14">
@@ -53,7 +78,11 @@ export function ProductListPage() {
         variant="catalogue"
       />
 
-      <section aria-label="Products" className="mt-10 sm:mt-12">
+      <section
+        aria-label="Products"
+        className="scroll-mt-30 mt-10 sm:mt-12"
+        ref={catalogueRef}
+      >
         {isLoading ? <ProductGridSkeleton /> : null}
 
         {isError ? (
@@ -86,7 +115,7 @@ export function ProductListPage() {
             <div className="mt-12">
               <Pagination
                 currentPage={currentPage}
-                onPageChange={setPage}
+                onPageChange={handlePageChange}
                 pageCount={pageCount}
               />
             </div>
