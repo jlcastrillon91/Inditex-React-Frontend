@@ -2,6 +2,7 @@
 name = "Editorial Minimal Retail"
 goal = "A product-focused, accessible retail UI with a small bundle and simple code."
 implementation = "Tailwind CSS 4 over semantic HTML and project-owned React components."
+theme_provider = "Configure font, primaryColor, and secondaryColor at the application root."
 
 [principles]
 items = [
@@ -27,6 +28,7 @@ focus = "#7C2635"
 format = "Semantic CSS custom properties consumed by Tailwind."
 rules = [
   "Use library-independent names such as --color-surface and --space-4.",
+  "Expose runtime theme values through ThemeProvider and CSS custom properties.",
   "Centralize color, spacing, radius, typography, and motion values.",
   "Do not export Tailwind class strings from business modules."
 ]

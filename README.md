@@ -55,6 +55,11 @@ CVA, CSS-in-JS, or a full component suite. See
 `specs/implementation-plan.toml` for the complete technical specification and
 implementation order, and `specs/styling-guidelines.toml` for the visual system.
 
+The application-level `ThemeProvider` accepts `font`, `primaryColor`, and
+`secondaryColor` overrides. It exposes them through context and semantic CSS
+custom properties, keeping feature components independent from the theme
+implementation.
+
 ## Environment
 
 `VITE_API_BASE_URL` defines the API origin. The development example points to:

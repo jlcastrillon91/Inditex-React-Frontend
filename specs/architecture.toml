@@ -22,6 +22,7 @@ rules = [
 server_data = "Feature hooks expose loading, success, error, and retry states."
 local_state = "Keep state in the closest component or hook that needs it."
 global_state = "Add Context or Redux Toolkit only when state is genuinely shared across unrelated routes."
+theme = "ThemeProvider exposes font, primaryColor, and secondaryColor through context and semantic CSS tokens."
 
 [react_pattern]
 name = "Modern Container/Presentational pattern"

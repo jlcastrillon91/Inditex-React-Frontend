@@ -1,12 +1,15 @@
 import { RouterProvider } from 'react-router-dom'
 
+import { ThemeProvider } from '@/app/providers/ThemeProvider'
 import { router } from '@/app/router'
 import { CartProvider } from '@/features/cart'
 
-export function App() {
+export function App({ theme }) {
   return (
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <ThemeProvider theme={theme}>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </ThemeProvider>
   )
 }
